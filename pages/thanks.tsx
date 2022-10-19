@@ -8,7 +8,7 @@ const Thanks: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Erik Karwatowski&rsquo;s Personal Website</title>
+        <title>Thanks: Erik Karwatowski&rsquo;s Personal Website</title>
         <meta name="description" content="I am currently looking for a job and think I would be a great teammate" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -19,10 +19,6 @@ const Thanks: NextPage = () => {
         <Image
           src={cat}
           alt="Picture of the author"
-          // width={500} automatically provided
-          // height={500} automatically provided
-          // blurDataURL="data:..." automatically provided
-          // placeholder="blur" // Optional blur-up while loading
         />
       </div>
     </div>

@@ -44,7 +44,7 @@ const Playlists = ({ data }: Props) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Erik Karwatowski&rsquo;s Personal Website</title>
+        <title>Playlists: Erik Karwatowski&rsquo;s Personal Website</title>
         <meta name="description" content="I am currently looking for a job and think I would be a great teammate" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

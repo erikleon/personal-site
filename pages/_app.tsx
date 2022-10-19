@@ -19,12 +19,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         `}
       </Script>
       <Head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arvo|Montserrat" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arvo|Montserrat&display=optional" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-
-
 
       <Layout>
         <Component {...pageProps} />
