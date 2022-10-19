@@ -74,24 +74,29 @@
   color: #51628E;
 }
 
-.input[type=email]:invalid ~ .label {
-  color: red;
-}
-
 /* active state */
 .input:focus ~ .bar:before,
 .input:focus ~ .bar:after {
   width: 50%;
 }
 
-.input[type=submit] {
+.error {
+  color: #BD5630;
+}
+
+.button {
   padding: 15px 40px;
   background-color: #51628E;
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
   color: #F1F2ED;
   font-size: 18px;
-  text-transform: lowercase;
   cursor: pointer;
+  width: 100%;
+  max-width: 260px;
+}
+
+.button:hover {
+  background-color: #91A1BA;
 }
 
