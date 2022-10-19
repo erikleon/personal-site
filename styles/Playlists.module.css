@@ -1,0 +1,12 @@
+.container {
+  padding: 0 2rem;
+}
+
+.playlistsContainer {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  
+}
+
+

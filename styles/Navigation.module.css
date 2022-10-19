@@ -1,0 +1,12 @@
+.header, .footer {
+  max-width: 100%;
+}
+
+.footer {
+  text-align: right;
+}
+
+.pageLink {
+  padding: 0 20px;
+  font-family: "Arvo";
+}
