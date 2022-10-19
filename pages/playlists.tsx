@@ -33,7 +33,7 @@ const Playlists = ({ data }: Props) => {
     if (playlists.length > 1) {
       return playlists.map((playlist : Playlist) => {
         return (
-          <div key={playlist.id}>
+          <div key={playlist.id} className={styles.playlistWrapper}>
             <iframe style={{borderRadius:'12px'}} src={`https://open.spotify.com/embed/playlist/${playlist.id}?utm_source=generator&theme=0`} width="380" height="380" frameBorder="0" allowFullScreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
         )
