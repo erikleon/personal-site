@@ -13,7 +13,7 @@ const About: NextPage = () => {
       </Head>
 
       <div className={styles.home}>
-        <h2 >I’m a software engineer with engineer management experience, passionate about collaborative teams, and delivering the best user experiences.</h2>
+        <h2 >I’m a software engineer with engineer management experience, passionate about building collaborative, multidisciplinary teams, and delivering the best user experiences.</h2>
 
         <p>
           I studied Environmental Science in undergrad and went back to school at CUNY City Tech to learn design and development principles on top of my self–taught front–end skills.

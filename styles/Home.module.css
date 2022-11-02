@@ -21,6 +21,7 @@
 .wrap {
   border-right: 0.08em solid #0E122D;
   animation: blink-caret .5s step-end infinite;
+  word-wrap: break-word;
 }
 
 @keyframes blink-caret {
