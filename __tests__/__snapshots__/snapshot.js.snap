@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders homepage unchanged 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <div
+      class="home"
+    >
+      <h1
+        class="postTitle"
+      >
+        Hi, I’m Erik Karwatowski.
+      </h1>
+      <h2>
+        A software engineer living and working in NYC and I can...
+      </h2>
+      <h1
+        class="typewrite"
+      >
+        <span
+          class="wrap"
+        />
+      </h1>
+    </div>
+  </div>
+</div>
+`;
