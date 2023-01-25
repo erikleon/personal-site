@@ -14,7 +14,7 @@ const Thanks: NextPage = () => {
       </Head>
 
       <div className={styles.home}>
-        <h2 >Sorry the page you are looking for doesn't seems to exist.</h2>
+        <h2 >Sorry the page you are looking for doesn&rsquo;t seems to exist.</h2>
         <h3>I am trying to get it up ASAP.</h3>
 
         <Image
