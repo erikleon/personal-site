@@ -29,7 +29,7 @@ const About: NextPage = () => {
 
         <p>If you want to get more info checkout my <a target="_blank" rel="noreferrer" href="/Karwatowski_Erik_Resume.pdf">Resume</a> or <a target="_blank" rel="noreferrer" href="https://github.com/erikleon/">Github</a>.</p>
 
-        <p>Also checkout some of the <Link href="/playlists"><a>music I like</a></Link></p>
+        <p>Also checkout some of the <Link href="/playlists">music I like</Link></p>
 
       </div>
     </div>

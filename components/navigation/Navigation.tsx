@@ -4,16 +4,16 @@ import styles from '../../styles/Navigation.module.css'
 const Navigation = () => (
   <header className={styles.header}>
     <nav>
-      <Link href="/">
-        <a className={styles.pageLink}>Home</a>
+      <Link href="/" className={styles.pageLink}>
+        Home
       </Link>
 
-      <Link href="/about">
-        <a className={styles.pageLink}>About</a>
+      <Link href="/about" className={styles.pageLink}>
+        About
       </Link>
       
-      <Link href="/contact">
-        <a className={styles.pageLink}>Contact</a>
+      <Link href="/contact" className={styles.pageLink}>
+        Contact
       </Link>
     </nav>
   </header>
