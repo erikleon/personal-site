@@ -16,3 +16,9 @@
   font-family: "Arvo";
   color: #0E122D;
 }
+
+@media (prefers-color-scheme: dark) {
+  .pageLink {
+    color: #F1F2ED;
+  }
+}

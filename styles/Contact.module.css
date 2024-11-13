@@ -97,3 +97,28 @@
   background-color: #91A1BA;
 }
 
+
+@media (prefers-color-scheme: dark) {
+  .input {
+    color: #F1F2ED;
+    border-bottom: 1px solid #F1F2ED;
+  }
+
+  .label {
+    color: #F1F2ED;
+  }
+
+  .bar:before,
+  .bar:after {
+    background: #F1F2ED;
+  }
+
+  .button {
+    background-color: #F1F2ED;
+    color: #0E122D;
+  }
+
+  .button:hover {
+    background-color: #91A1BA;
+  }
+}

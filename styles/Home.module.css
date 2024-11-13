@@ -28,3 +28,15 @@
   from, to { border-color: transparent }
   50% { border-color: #0E122D }
 }
+
+@media (prefers-color-scheme: dark) {
+  .wrap {
+    border-right: 0.08em solid #F1F2ED;
+  }
+
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: #F1F2ED }
+    
+  }
+}
