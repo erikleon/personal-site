@@ -31,6 +31,33 @@ const About: NextPage = () => {
 
         <p>Also checkout some of the <Link href="/playlists">music I like</Link></p>
 
+        <p>Organizations and causes I support and care about:</p>
+        <ul>
+          <li>
+            <a target="_blank" rel="noreferrer" href="https://donate.wikimedia.org/">Wikipedia</a>
+          </li>
+
+          <li>
+            <a target="_blank" rel="noreferrer" href="https://www.againstmalaria.com/Donate.aspx">Against Malaria</a>
+          </li>
+
+          <li>
+            <a target="_blank" rel="noreferrer" href="https://helenkellerintl.org/">Helen keller International</a>
+          </li>
+
+          <li>
+            <a target="_blank" rel="noreferrer" href="https://www.cityharvest.org/">City Harvest</a>
+          </li>
+
+          <li>
+            <a target="_blank" rel="noreferrer" href="https://www.wnyc.org/donate">WNYC</a>
+          </li>
+
+          <li>
+            <a target="_blank" rel="noreferrer" href="https://www.thetrevorproject.org/">The Trevor Project</a>
+          </li>
+        </ul>
+
       </div>
     </div>
   )
