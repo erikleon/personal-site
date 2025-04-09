@@ -16,7 +16,7 @@ const Navigation = ({
         About
       </Link>
 
-      <Link href="/contact" className={styles.pageLink}>
+      <Link href="mailto:yeserikcan@gmail.com" className={styles.pageLink}>
         Contact
       </Link>
 
