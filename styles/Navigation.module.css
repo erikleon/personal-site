@@ -1,4 +1,5 @@
-.header, .footer {
+.header,
+.footer {
   max-width: 100%;
 }
 
@@ -14,11 +15,38 @@
 .pageLink {
   padding: 0 20px;
   font-family: "Arvo";
-  color: #0E122D;
 }
 
-@media (prefers-color-scheme: dark) {
-  .pageLink {
-    color: #F1F2ED;
-  }
+.dark {
+  border-color: #f1f2ed;
+}
+
+.light {
+  border-color: #0e122d;
+}
+
+.themeToggleButton {
+  background: linear-gradient(to right, #f1f2ed 50%, #0e122d 50%);
+  border: 2px solid #0e122d;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  position: relative;
+  color: transparent;
+  overflow: hidden;
+  transform: rotate(45deg);
+  float: right;
+  margin: 0 20px;
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1) 2s all;
+  background-size: 200%;
+  background-position: 25% 50%;
+}
+
+.themeToggleButton:hover {
+  background-position: 100% 50%;
+}
+
+.themeToggleButton.dark {
+  border-color: #f1f2ed;
 }

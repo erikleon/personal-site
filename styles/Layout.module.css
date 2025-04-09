@@ -6,3 +6,45 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.layout.dark {
+  background: #0e122d;
+  color: #f1f2ed;
+}
+
+.layout.dark a {
+  color: #f1f2ed;
+}
+
+.layout.light {
+  background: #f1f2ed;
+  color: #0e122d;
+}
+
+.layout.light a {
+  color: #0e122d;
+}
+
+.layout a {
+  text-decoration: underline;
+}
+
+@media (prefers-color-scheme: dark) {
+  .layout {
+    background: #0e122d;
+    color: #f1f2ed;
+  }
+
+  .layout.light {
+    background: #f1f2ed;
+    color: #0e122d;
+  }
+
+  .layout.light a {
+    color: #0e122d;
+  }
+
+  .layout a {
+    color: #f1f2ed;
+  }
+}
