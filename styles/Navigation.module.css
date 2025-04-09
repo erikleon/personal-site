@@ -13,7 +13,7 @@
 }
 
 .pageLink {
-  padding: 0 20px;
+  padding: 0 18px;
   font-family: "Arvo";
 }
 
@@ -37,7 +37,7 @@
   overflow: hidden;
   transform: rotate(45deg);
   float: right;
-  margin: 0 20px;
+  margin: 0 20px 0 0;
   transition: cubic-bezier(0.075, 0.82, 0.165, 1) 2s all;
   background-size: 200%;
   background-position: 25% 50%;
