@@ -2,6 +2,7 @@ import Navbar from "../navigation/Navigation";
 import Footer from "../footer/Footer";
 import styles from "../../styles/Layout.module.css";
 import { useEffect } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function Layout({ children }: Record<string, React.ReactNode>) {
   console.log(
@@ -46,6 +47,7 @@ export default function Layout({ children }: Record<string, React.ReactNode>) {
       <Navbar handleThemeToggle={handleThemeToggle} />
       <main>{children}</main>
       <Footer />
+      <SpeedInsights />
     </div>
   );
 }
