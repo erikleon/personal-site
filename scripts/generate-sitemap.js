@@ -1,9 +1,8 @@
 const fs = require('fs')
-const globby = require('globby')
+const path = require('path')
 
 function addPage(page) {
-  const path = page.replace('pages', '').replace('.tsx', '').replace('.mdx', '')
-  const route = path === '/index' ? '' : path
+  const route = page === '' ? '' : `/${page}`
 
   return `  <url>
     <loc>${`${process.env.WEBSITE_URL}${route}`}</loc>
@@ -11,18 +10,30 @@ function addPage(page) {
   </url>`
 }
 
-async function generateSitemap() {
-  // Ignore Next.js specific files (e.g., _app.js) and API routes.
-  const pages = await globby([
-    'pages/**/*{.tsx,.mdx}',
-    '!pages/_*.tsx',
-    '!pages/api',
-  ])
+function getPages(dir, prefix = '') {
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+  const pages = []
+
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      pages.push(...getPages(path.join(dir, entry.name), `${prefix}${entry.name}/`))
+    } else if (entry.isFile() && (entry.name.endsWith('.tsx') || entry.name.endsWith('.mdx')) && !entry.name.startsWith('_')) {
+      const name = entry.name.replace(/\.(tsx|mdx)$/, '')
+      const route = name === 'index' ? prefix.replace(/\/$/, '') : `${prefix}${name}`
+      pages.push(route)
+    }
+  }
+
+  return pages
+}
+
+function generateSitemap() {
+  const pages = getPages(path.join(__dirname, '..', 'pages'))
   const sitemap = `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${pages.map(addPage).join('\n')}
 </urlset>`
 
-  fs.writeFileSync('public/sitemap.xml', sitemap)
+  fs.writeFileSync(path.join(__dirname, '..', 'public', 'sitemap.xml'), sitemap)
 }
 
 generateSitemap()
