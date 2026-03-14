@@ -13,6 +13,16 @@
 
 .playlistWrapper {
   padding: 16px 0;
+  max-width: 100%;
 }
 
+.playlistWrapper iframe {
+  max-width: 100%;
+}
 
+@media (max-width: 768px) {
+  .playlistsContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
