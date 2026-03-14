@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 function addPage(page) {
-  const route = page === 'index' ? '' : `/${page}`
+  const route = page === '' ? '' : `/${page}`
 
   return `  <url>
     <loc>${`${process.env.WEBSITE_URL}${route}`}</loc>
@@ -10,10 +10,21 @@ function addPage(page) {
   </url>`
 }
 
-function getPages(dir) {
-  return fs.readdirSync(dir)
-    .filter(file => file.endsWith('.tsx') && !file.startsWith('_'))
-    .map(file => file.replace('.tsx', ''))
+function getPages(dir, prefix = '') {
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+  const pages = []
+
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      pages.push(...getPages(path.join(dir, entry.name), `${prefix}${entry.name}/`))
+    } else if (entry.isFile() && (entry.name.endsWith('.tsx') || entry.name.endsWith('.mdx')) && !entry.name.startsWith('_')) {
+      const name = entry.name.replace(/\.(tsx|mdx)$/, '')
+      const route = name === 'index' ? prefix.replace(/\/$/, '') : `${prefix}${name}`
+      pages.push(route)
+    }
+  }
+
+  return pages
 }
 
 function generateSitemap() {
