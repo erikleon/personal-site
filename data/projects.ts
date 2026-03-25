@@ -1,0 +1,107 @@
+export interface ProjectEntry {
+  name: string;
+  company: string;
+  type: "Feature" | "Architecture" | "DX";
+  description: string;
+  stack: string[];
+  highlights: string[];
+}
+
+export const projects: ProjectEntry[] = [
+  {
+    name: "OneSchema CSV Import Integration",
+    company: "Copy.ai",
+    type: "Feature",
+    description:
+      "End-to-end integration of OneSchema for bulk data imports, replacing a brittle in-house parser.",
+    stack: ["Next.js", "NestJS", "MongoDB"],
+    highlights: [
+      "Reduced CSV-related support tickets by 40%",
+      "Handled files with 100k+ rows via streaming upload",
+    ],
+  },
+  {
+    name: "Async Job Pipeline",
+    company: "Copy.ai",
+    type: "Architecture",
+    description:
+      "Distributed job queue for long-running content generation tasks using BullMQ and Redis.",
+    stack: ["BullMQ", "NestJS", "Redis"],
+    highlights: [
+      "Processed 500k+ jobs per month with automatic retries",
+      "Added observability dashboards for queue health",
+    ],
+  },
+  {
+    name: "Collaborative Workflow Editor",
+    company: "Copy.ai",
+    type: "Feature",
+    description:
+      "Drag-and-drop workflow builder enabling teams to chain AI prompts into reusable pipelines.",
+    stack: ["React", "Next.js", "TypeScript"],
+    highlights: [
+      "Used by 50k+ monthly active users",
+      "Implemented real-time collaboration via WebSocket sync",
+    ],
+  },
+  {
+    name: "NestJS API Migration",
+    company: "Copy.ai",
+    type: "Architecture",
+    description:
+      "Migrated monolithic Express handlers to a modular NestJS architecture with dependency injection.",
+    stack: ["NestJS", "TypeScript", "Jest"],
+    highlights: [
+      "Achieved 90%+ unit test coverage on migrated modules",
+      "Reduced average API latency by 25%",
+    ],
+  },
+  {
+    name: "Role-Based Access Control",
+    company: "Copy.ai",
+    type: "Feature",
+    description:
+      "Platform-wide RBAC system supporting workspace-level roles and fine-grained permissions.",
+    stack: ["NestJS", "MongoDB", "JWT"],
+    highlights: [
+      "Enabled enterprise tier with custom role definitions",
+      "Integrated with existing JWT session management",
+    ],
+  },
+  {
+    name: "Candidate Dashboard Rebuild",
+    company: "Jopwell",
+    type: "Feature",
+    description:
+      "Rebuilt the primary candidate-facing dashboard from a Rails view into a Next.js SPA.",
+    stack: ["Next.js", "Redux", "TypeScript"],
+    highlights: [
+      "Improved page load times by 60%",
+      "Increased candidate engagement metrics by 25%",
+    ],
+  },
+  {
+    name: "Shared Component Library",
+    company: "Jopwell",
+    type: "DX",
+    description:
+      "Design-system component library built with Material UI and documented in Storybook.",
+    stack: ["React", "Material UI", "Storybook"],
+    highlights: [
+      "Adopted across three product teams",
+      "Reduced UI inconsistency bugs by 50%",
+    ],
+  },
+  {
+    name: "SSR Marketing Pages",
+    company: "Jopwell",
+    type: "Feature",
+    description:
+      "Server-side rendered marketing and landing pages optimised for SEO and Core Web Vitals.",
+    stack: ["Next.js", "React", "CSS Modules"],
+    highlights: [
+      "Boosted organic search traffic by 35%",
+      "Achieved 95+ Lighthouse performance scores",
+    ],
+  },
+];
