@@ -5,10 +5,24 @@ import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 
 const clientId = process.env.GITHUB_CLIENT_ID;
 const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+const nextAuthSecret = process.env.NEXTAUTH_SECRET;
+const authorizedGithubId = process.env.AUTHORIZED_GITHUB_ID;
 
 if (!clientId || !clientSecret) {
   throw new Error(
     "Missing required env vars: GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET must be set"
+  );
+}
+
+if (!nextAuthSecret) {
+  throw new Error(
+    "Missing required env var: NEXTAUTH_SECRET must be set (JWT sessions become invalid across restarts without it)"
+  );
+}
+
+if (!authorizedGithubId) {
+  throw new Error(
+    "Missing required env var: AUTHORIZED_GITHUB_ID must be set to restrict tool access to the site owner"
   );
 }
 
@@ -20,7 +34,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: nextAuthSecret,
   callbacks: {
     jwt({ token, account }) {
       // Persist the GitHub provider account ID into the token on first sign-in
@@ -31,8 +45,8 @@ export const authOptions: AuthOptions = {
     },
     session({ session, token }) {
       // Expose githubId on session.user.id so requireAuth can compare it
-      if (session.user) {
-        (session.user as { id?: string }).id = token.githubId as string;
+      if (session.user && typeof token.githubId === "string") {
+        (session.user as { id?: string }).id = token.githubId;
       }
       return session;
     },
@@ -48,12 +62,9 @@ export async function requireAuth(
     return { redirect: { destination: "/", permanent: false } };
   }
 
-  const authorizedId = process.env.AUTHORIZED_GITHUB_ID;
-  if (authorizedId) {
-    const userId = (session.user as { id?: string } | null)?.id;
-    if (userId !== authorizedId) {
-      return { redirect: { destination: "/", permanent: false } };
-    }
+  const userId = (session.user as { id?: string } | null)?.id;
+  if (userId !== authorizedGithubId) {
+    return { redirect: { destination: "/", permanent: false } };
   }
 
   return { props: {} };
