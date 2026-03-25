@@ -1,34 +1,82 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Erik Karwatowski's Personal Website
+
+A personal website built with [Next.js](https://nextjs.org/), React, and TypeScript. Features a typewriter animation on the homepage, an about page, Spotify playlist integration, theme toggling, and GitHub OAuth–protected routes via NextAuth.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (Pages Router)
+- **Language:** TypeScript
+- **Auth:** NextAuth.js with GitHub OAuth
+- **Styling:** CSS Modules + Sass
+- **Testing:** Jest + React Testing Library
+- **Linting:** ESLint
+- **Analytics:** Vercel Speed Insights
+
+## Pages
+
+| Route        | Description                                      |
+| ------------ | ------------------------------------------------ |
+| `/`          | Home — typewriter animation cycling action words |
+| `/about`     | Bio, resume link, causes, and links              |
+| `/playlists` | Spotify playlists fetched via the Spotify API    |
+| `/thanks`    | Confirmation page after contact form submission  |
+| `/404`       | Custom 404 page                                  |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js ^24.0.0
+
+### Environment Variables
+
+Copy the example env file and fill in your values:
 
 ```bash
-npm run dev
-# or
-yarn dev
+cp .env.local.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You will need:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- **GitHub OAuth App** credentials (`GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`) — create one at https://github.com/settings/developers
+- **NextAuth secret** (`NEXTAUTH_SECRET`) — generate with `openssl rand -base64 32`
+- **Authorized GitHub user ID** (`AUTHORIZED_GITHUB_ID`) — find yours at `https://api.github.com/users/<your-username>`
+- **Spotify API** credentials (`SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`) — create an app at https://developer.spotify.com/dashboard/applications
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+See [.env.local.example](.env.local.example) for the full list.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Development
 
-## Learn More
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+| Command         | Description                                   |
+| --------------- | --------------------------------------------- |
+| `npm run dev`   | Start the development server                  |
+| `npm run build` | Generate the sitemap and build for production |
+| `npm start`     | Start the production server                   |
+| `npm run lint`  | Run ESLint                                    |
+| `npm test`      | Run tests in watch mode                       |
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+components/       — Reusable UI components (Navigation, Footer, Layout)
+lib/              — Shared utilities (auth config)
+pages/            — Next.js pages and API routes
+  api/auth/       — NextAuth API route
+public/           — Static assets and sitemap
+scripts/          — Build-time scripts (sitemap generation)
+styles/           — CSS Modules
+__tests__/        — Jest tests
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Deployment
+
+Deploy on [Vercel](https://vercel.com) or any platform that supports Next.js. Make sure all environment variables from `.env.local.example` are configured in your hosting provider.
