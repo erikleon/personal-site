@@ -1,0 +1,115 @@
+.container {
+  padding: 0 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: 2rem;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: currentColor;
+  opacity: 0.3;
+}
+
+.entry {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.entry::before {
+  content: "";
+  position: absolute;
+  left: -2rem;
+  top: 0.5rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background: transparent;
+}
+
+.entryHeader {
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.company {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.role {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.period {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.stackList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.stackChip {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.highlights {
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+}
+
+.highlights li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.toggle {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .company {
+    font-size: 1.2rem;
+  }
+
+  .entryHeader {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
