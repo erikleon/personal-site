@@ -28,13 +28,16 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       {project.highlights.length > 0 && (
         <>
           <button
+            type="button"
+            aria-expanded={expanded}
+            aria-controls={`highlights-${project.name}`}
             className={styles.expandButton}
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => setExpanded((prev) => !prev)}
           >
             {expanded ? "Hide highlights" : "Show highlights"}
           </button>
           {expanded && (
-            <ul className={styles.highlights}>
+            <ul id={`highlights-${project.name}`} className={styles.highlights}>
               {project.highlights.map((h) => (
                 <li key={h}>{h}</li>
               ))}

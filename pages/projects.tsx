@@ -41,6 +41,8 @@ const Projects: NextPage = () => {
           {companyOptions.map((opt) => (
             <button
               key={opt}
+              type="button"
+              aria-pressed={companyFilter === opt}
               className={`${styles.filterButton} ${companyFilter === opt ? styles.filterButtonActive : ""}`}
               onClick={() => setCompanyFilter(opt)}
             >
@@ -53,6 +55,8 @@ const Projects: NextPage = () => {
           {typeOptions.map((opt) => (
             <button
               key={opt}
+              type="button"
+              aria-pressed={typeFilter === opt}
               className={`${styles.filterButton} ${typeFilter === opt ? styles.filterButtonActive : ""}`}
               onClick={() => setTypeFilter(opt)}
             >

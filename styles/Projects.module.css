@@ -51,14 +51,11 @@
   color: #f1f2ed;
 }
 
-:global(.light) .filterButtonActive {
-  background: #0e122d;
-  color: #f1f2ed;
-}
-
-:global(.dark) .filterButtonActive {
-  background: #f1f2ed;
-  color: #0e122d;
+@media (prefers-color-scheme: dark) {
+  .filterButtonActive {
+    background: #f1f2ed;
+    color: #0e122d;
+  }
 }
 
 .grid {
