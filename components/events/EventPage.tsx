@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styles from "./EventPage.module.css";
+import AddToCalendar from "./AddToCalendar";
+import EmojiRain from "./EmojiRain";
 import RSVPForm from "./RSVPForm";
 import RSVPSuccess from "./RSVPSuccess";
 import type { EventEntry } from "../../data/events";
@@ -46,11 +48,14 @@ export default function EventPage({ event, themeStyles }: EventPageProps) {
             event.location
           )}
         </p>
+        <AddToCalendar event={event} />
       </div>
 
       <p className={s.description || styles.description}>
         {event.description}
       </p>
+
+      {rsvp && event.heroEmoji && <EmojiRain emoji={event.heroEmoji} />}
 
       {rsvp ? (
         <RSVPSuccess rsvp={rsvp} />
