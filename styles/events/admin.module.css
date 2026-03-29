@@ -1,0 +1,52 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.heading {
+  font-family: "Arvo", serif;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.select {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid currentColor;
+  opacity: 0.9;
+}
+
+.table th {
+  font-weight: 700;
+  opacity: 1;
+}
