@@ -16,18 +16,24 @@ export default function PasswordGate({ slug, onSuccess }: PasswordGateProps) {
     setError("");
     setLoading(true);
 
-    const res = await fetch("/api/events/verify-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug, password }),
-    });
+    try {
+      const res = await fetch("/api/events/verify-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug, password }),
+      });
 
-    setLoading(false);
-
-    if (res.ok) {
-      onSuccess();
-    } else {
-      setError("Wrong password. Try again!");
+      if (res.ok) {
+        onSuccess();
+      } else if (res.status === 429) {
+        setError("Too many attempts. Please wait a few minutes.");
+      } else {
+        setError("Wrong password. Try again!");
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   }
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Head from "next/head";
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { events, EventEntry } from "../../data/events";
+import { hasValidAccess } from "../../lib/event-cookie";
 import PasswordGate from "../../components/events/PasswordGate";
 import EventPage from "../../components/events/EventPage";
 
@@ -18,10 +19,10 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   // Strip passwordHash before sending to client
   const { passwordHash: _, ...safeEvent } = event;
 
-  // Check if user already has access cookie
-  const hasAccess = ctx.req.cookies[`event-access-${slug}`] === "1";
+  // Verify HMAC-signed access cookie
+  const access = hasValidAccess(ctx.req.cookies, slug);
 
-  return { props: { event: safeEvent, hasAccess } };
+  return { props: { event: safeEvent, hasAccess: access } };
 }
 
 export default function EventSlugPage({

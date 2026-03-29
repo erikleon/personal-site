@@ -31,8 +31,10 @@ export async function saveRSVP(
     createdAt: new Date().toISOString(),
   };
 
-  await redis.set(`rsvp:${slug}:${id}`, JSON.stringify(rsvp));
-  await redis.sadd(`rsvp-index:${slug}`, id);
+  const pipeline = redis.pipeline();
+  pipeline.set(`rsvp:${slug}:${id}`, JSON.stringify(rsvp));
+  pipeline.sadd(`rsvp-index:${slug}`, id);
+  await pipeline.exec();
 
   return rsvp;
 }
