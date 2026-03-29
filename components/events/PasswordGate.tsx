@@ -40,7 +40,7 @@ export default function PasswordGate({ slug, onSuccess }: PasswordGateProps) {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.heading}>You're invited!</h1>
+        <h1 className={styles.heading}>You&apos;re invited!</h1>
         <p className={styles.subtitle}>Enter the party password to continue</p>
         <form onSubmit={handleSubmit} className={styles.form}>
           <input

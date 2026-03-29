@@ -8,7 +8,11 @@ interface RSVPFormProps {
   onSuccess: (rsvp: RSVP) => void;
 }
 
-export default function RSVPForm({ slug, maxGuests, onSuccess }: RSVPFormProps) {
+export default function RSVPForm({
+  slug,
+  maxGuests,
+  onSuccess,
+}: RSVPFormProps) {
   const [name, setName] = useState("");
   const [guestCount, setGuestCount] = useState(1);
   const [contact, setContact] = useState("");
@@ -43,7 +47,7 @@ export default function RSVPForm({ slug, maxGuests, onSuccess }: RSVPFormProps) 
       <h2 className={styles.heading}>RSVP</h2>
 
       <label className={styles.label}>
-        Your name *
+        Your name(s) *
         <input
           type="text"
           value={name}
