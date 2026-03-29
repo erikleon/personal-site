@@ -9,6 +9,66 @@ export interface ProjectEntry {
 
 export const projects: ProjectEntry[] = [
   {
+    name: "Enum-to-Database Architecture Migration",
+    company: "DDC",
+    type: "Architecture",
+    description:
+      "Replaced compile-time C# enums with database-driven workflow statuses across 5 API layers (controller, business logic, data access, storage, and frontend), eliminating code deployments for status configuration changes.",
+    stack: [".NET 8", "EF Core", "Angular", "SQL Server"],
+    highlights: [
+      "Introduced WorkflowActionIds constants class for compile-time safety on critical workflow transitions",
+      "Fixed a subtle bug where one code path silently fell back to hardcoded defaults due to missing database context",
+    ],
+  },
+  {
+    name: "Reusable DataFieldComponent",
+    company: "DDC",
+    type: "DX",
+    description:
+      "Angular component that replaced 600+ lines of duplicated form markup across contract details and insurance record forms with a single configurable field renderer.",
+    stack: ["Angular", "TypeScript", "PrimeNG"],
+    highlights: [
+      "Net reduction of ~600 lines of template code across the application",
+      "Supports text, textarea, dropdown, calendar, and currency input types with read-only/editable modes",
+    ],
+  },
+  {
+    name: "Server-Side Pagination with URL State",
+    company: "DDC",
+    type: "Feature",
+    description:
+      "Migrated dashboard from client-side filtering to server-side pagination using PrimeNG lazy-loaded tables with bookmarkable URL query parameter state.",
+    stack: ["Angular", "PrimeNG", ".NET 8", "SQL Server"],
+    highlights: [
+      "Dashboard state (page, search, sort, status filter) is fully bookmarkable and back-button friendly",
+      "Fixed an infinite sort loop caused by PrimeNG's lazy table re-emitting sort events on data load",
+    ],
+  },
+  {
+    name: "Test Infrastructure from Zero",
+    company: "DDC",
+    type: "DX",
+    description:
+      "Built the entire unit test infrastructure for a .NET 8 API with zero existing tests, plus fixed 20+ broken Angular component tests to restore CI green status.",
+    stack: [".NET 8", "MSTest", "Moq", "EF Core InMemoryDatabase", "Angular"],
+    highlights: [
+      "34+ API tests covering auth, dashboard search, and insurance record retrieval",
+      "InMemoryDatabase tests caught a navigation property mapping bug during the stored-procedure-to-LINQ migration",
+    ],
+  },
+  {
+    name: "Export Data Integrity Fix",
+    company: "DDC",
+    type: "Feature",
+    description:
+      "Fixed a critical bug where PDF and Excel exports only included the current paginated page instead of all filtered results, silently sending incomplete data to stakeholders.",
+    stack: [".NET 8", "Angular", "PrimeNG"],
+    highlights: [
+      "Created a dedicated GetDataForExport() method that fetches the full filtered dataset",
+      "Added confirmation dialogs and disabled-state buttons to prevent accidental exports",
+    ],
+  },
+  {
     name: "OneSchema CSV Import Integration",
     company: "Copy.ai",
     type: "Feature",
