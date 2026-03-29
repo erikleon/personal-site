@@ -8,6 +8,19 @@ export interface WorkEntry {
 
 export const work: WorkEntry[] = [
   {
+    company: "DDC",
+    title: "Full-Stack Engineer",
+    period: "2025–2026",
+    stack: [".NET 8", "Angular", "PrimeNG", "EF Core", "SQL Server", "Azure Blob Storage"],
+    highlights: [
+      "Built a full-stack contract insurance management application from the ground up with .NET 8 Web API and Angular, delivering dashboard search, document upload workflows, and PDF/Excel export",
+      "Architected a migration from compile-time enums to database-driven workflow statuses across 5 API layers, eliminating code deployments for status configuration changes",
+      "Designed a reusable DataFieldComponent in Angular that replaced 600+ lines of duplicated form markup, reducing template complexity by ~50%",
+      "Migrated the dashboard from client-side to server-side pagination with PrimeNG lazy-loaded tables and URL query parameter state synchronization",
+      "Bootstrapped the entire unit test infrastructure — created the test project, introduced MSTest/Moq/EF Core InMemoryDatabase, and wrote 34+ API tests while fixing 20+ broken Angular component tests",
+    ],
+  },
+  {
     company: "Copy.ai",
     title: "Full-Stack Engineer",
     period: "2021–2024",
