@@ -1,10 +1,13 @@
+import { useRouter } from "next/router";
 import Navbar from "../navigation/Navigation";
 import Footer from "../footer/Footer";
 import styles from "../../styles/Layout.module.css";
 import { useEffect } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-export default function Layout({ children }: Record<string, React.ReactNode>) {
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const isEventPage = router.pathname.startsWith("/events");
   console.log(
     "Hey there! If you're inspecting this page, you should hire me! I'm a great teammate and I'm looking for a job right now!"
   );
@@ -44,9 +47,9 @@ export default function Layout({ children }: Record<string, React.ReactNode>) {
 
   return (
     <div id="wrapperElement" className={styles.layout}>
-      <Navbar handleThemeToggle={handleThemeToggle} />
+      {!isEventPage && <Navbar handleThemeToggle={handleThemeToggle} />}
       <main>{children}</main>
-      <Footer />
+      {!isEventPage && <Footer />}
       <SpeedInsights />
     </div>
   );
