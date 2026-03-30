@@ -1,0 +1,151 @@
+/* Basketball Birthday Bash theme */
+/* Colors: orange #EE6730, black #1a1a1a, hardwood tan #C4A265, white #fff */
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0) scaleX(1) scaleY(1);
+  }
+  50% {
+    transform: translateY(-24px) scaleX(0.95) scaleY(1.05);
+  }
+  80% {
+    transform: translateY(0) scaleX(1.08) scaleY(0.92);
+  }
+}
+
+/* ---- Layout ---- */
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  background: #1a1a1a;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* ---- Hero ---- */
+
+.hero {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 4px dashed #C4A265;
+}
+
+.heroEmoji {
+  font-size: 5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.title {
+  font-family: "Arvo", serif;
+  font-size: 2.5rem;
+  margin: 0;
+  color: #EE6730;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: 2px 2px 0 #C4A265;
+}
+
+/* ---- Details (scoreboard style) ---- */
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: #2a2a2a;
+  border: 3px solid #EE6730;
+  border-radius: 12px;
+  position: relative;
+}
+
+.details::before {
+  content: "GAME INFO";
+  display: block;
+  font-family: "Arvo", serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #C4A265;
+  margin-bottom: 0.25rem;
+}
+
+.detail {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.detail strong {
+  color: #EE6730;
+}
+
+.detail a {
+  color: #C4A265;
+  text-decoration: underline;
+}
+
+.detail a:hover {
+  color: #EE6730;
+}
+
+/* ---- Description ---- */
+
+.description {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #f0f0f0;
+  border-left: 4px solid #EE6730;
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* ---- Court-line decorative borders ---- */
+
+.container::before,
+.container::after {
+  content: "";
+  display: block;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    #C4A265 0,
+    #C4A265 20px,
+    transparent 20px,
+    transparent 30px
+  );
+  margin: 0 -1.5rem;
+}
+
+.container::before {
+  margin-bottom: 1.5rem;
+}
+
+.container::after {
+  margin-top: 2rem;
+}
+
+/* ---- Mobile-first responsive ---- */
+
+@media (min-width: 480px) {
+  .container {
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    min-height: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    font-size: 2.75rem;
+  }
+}

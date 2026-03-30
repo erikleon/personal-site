@@ -5,6 +5,11 @@ import { events, EventEntry } from "../../data/events";
 import { hasValidAccess } from "../../lib/event-cookie";
 import PasswordGate from "../../components/events/PasswordGate";
 import EventPage from "../../components/events/EventPage";
+import basketballBirthdayStyles from "../../styles/events/basketball-birthday.module.css";
+
+const themeMap: Record<string, Record<string, string>> = {
+  "basketball-birthday": basketballBirthdayStyles,
+};
 
 type SafeEvent = Omit<EventEntry, "passwordHash">;
 
@@ -37,7 +42,7 @@ export default function EventSlugPage({
         <title>{event.title}</title>
       </Head>
       {hasAccess ? (
-        <EventPage event={event as SafeEvent} />
+        <EventPage event={event as SafeEvent} themeStyles={themeMap[event.theme]} />
       ) : (
         <PasswordGate slug={event.slug} onSuccess={() => setHasAccess(true)} />
       )}
