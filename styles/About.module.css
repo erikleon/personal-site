@@ -1,0 +1,50 @@
+.skillsSection {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.skillsSection h3 {
+  margin-bottom: 1rem;
+}
+
+.skillCategory {
+  margin-bottom: 1.25rem;
+}
+
+.categoryLabel {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  color: #0e122d;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-family: 'Arvo', serif;
+  background: #0e122d;
+  color: #f1f2ed;
+  border: 1px solid #0e122d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .categoryLabel {
+    color: #f1f2ed;
+  }
+
+  .pill {
+    background: #f1f2ed;
+    color: #0e122d;
+    border-color: #f1f2ed;
+  }
+}

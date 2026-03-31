@@ -2,6 +2,8 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import aboutStyles from '../styles/About.module.css'
+import { skills } from '../data/skills'
 
 const About: NextPage = () => {
   return (
@@ -32,6 +34,20 @@ const About: NextPage = () => {
         <p>This is a <a target="_blank" rel="noreferrer" href="https://www.oneschema.co/blog/copy-ai-oneschema">case study</a> of a project I led.</p>
 
         <p>Also checkout some of the <Link href="/playlists">music I like</Link></p>
+
+        <div className={aboutStyles.skillsSection}>
+          <h3>Skills</h3>
+          {skills.map((category) => (
+            <div key={category.label} className={aboutStyles.skillCategory}>
+              <div className={aboutStyles.categoryLabel}>{category.label}</div>
+              <div className={aboutStyles.pills}>
+                {category.skills.map((skill) => (
+                  <span key={skill} className={aboutStyles.pill}>{skill}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
 
         <p>Organizations and causes I support and care about:</p>
         <ul>
