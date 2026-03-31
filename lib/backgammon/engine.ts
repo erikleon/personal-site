@@ -230,6 +230,7 @@ export function applyMove(state: GameState, move: Move): GameState {
 
 /** Get all unique legal moves for the current remaining dice. */
 export function getLegalMoves(state: GameState): Move[] {
+  if (state.phase === "finished") return [];
   const dice = remainingDice(state);
   const uniqueDice = Array.from(new Set(dice));
   const allMoves: Move[] = [];
@@ -308,7 +309,21 @@ export function getLegalTurns(state: GameState): Turn[] {
     }
   }
 
-  return unique.length > 0 ? unique : [[]];
+  const result = unique.length > 0 ? unique : [[]];
+
+  // Backgammon rule: if only one die can be used (not both), must use the larger.
+  if (
+    result.length > 0 &&
+    result[0].length === 1 &&
+    state.dice &&
+    state.dice[0] !== state.dice[1]
+  ) {
+    const largerDie = Math.max(state.dice[0], state.dice[1]);
+    const turnsWithLarger = result.filter((t) => t[0]?.die === largerDie);
+    if (turnsWithLarger.length > 0) return turnsWithLarger;
+  }
+
+  return result;
 }
 
 // ── Win Check ────────────────────────────────────────────
@@ -322,6 +337,7 @@ export function checkWinner(state: GameState): Player | null {
 // ── State Transitions ────────────────────────────────────
 
 export function startTurn(state: GameState): GameState {
+  if (state.phase === "finished") return state;
   const s = cloneState(state);
   s.dice = rollDice();
   s.usedDice = [];
@@ -378,7 +394,6 @@ function stateKey(s: GameState): string {
 /** Get pip count for a player (total distance to bear off). */
 export function pipCount(state: GameState, player: Player): number {
   let total = 0;
-  const dir = player === "white" ? 1 : -1;
 
   for (let i = 0; i < 24; i++) {
     const pt = state.points[i];
