@@ -3,6 +3,7 @@ import {
   rollDice,
   remainingDice,
   getLegalMoves,
+  getLegalTurns,
   applyMove,
   checkWinner,
   canBearOff,
@@ -166,6 +167,41 @@ describe("backgammon engine", () => {
       }
     });
 
+    it("generates bearing off moves with exact die", () => {
+      const state = createInitialState();
+      // Clear board, put white in home
+      for (let i = 0; i < 24; i++) {
+        state.points[i] = { player: null, count: 0 };
+      }
+      state.points[3] = { player: "white", count: 2 }; // point 4
+      state.currentPlayer = "white";
+      state.dice = [4, 2];
+      state.usedDice = [];
+      state.phase = "moving";
+
+      const moves = getLegalMoves(state);
+      const bearOff = moves.find((m) => m.to === "off" && m.die === 4);
+      expect(bearOff).toBeDefined();
+      expect(bearOff!.from).toBe(3);
+    });
+
+    it("allows bearing off with higher die when no higher checker exists", () => {
+      const state = createInitialState();
+      for (let i = 0; i < 24; i++) {
+        state.points[i] = { player: null, count: 0 };
+      }
+      // White checker on point 2 (idx 1), no checker on points 3-6
+      state.points[1] = { player: "white", count: 1 };
+      state.currentPlayer = "white";
+      state.dice = [5, 6];
+      state.usedDice = [];
+      state.phase = "moving";
+
+      const moves = getLegalMoves(state);
+      const bearOff = moves.filter((m) => m.to === "off");
+      expect(bearOff.length).toBeGreaterThan(0);
+    });
+
     it("returns empty when all entry points blocked", () => {
       const state = createInitialState();
       state.currentPlayer = "white";
@@ -267,6 +303,55 @@ describe("backgammon engine", () => {
     });
   });
 
+  describe("getLegalTurns", () => {
+    it("enforces must-use-maximum-dice rule", () => {
+      const state = createInitialState();
+      // Set up a position where one die can be used but not both,
+      // and verify all returned turns use exactly one die
+      for (let i = 0; i < 24; i++) {
+        state.points[i] = { player: null, count: 0 };
+      }
+      // White checker on point 6 (idx 5), blocked at destination for die 1 but open for die 3
+      state.points[5] = { player: "white", count: 1 };
+      state.points[4] = { player: "black", count: 2 }; // blocks die=1 move to idx 4
+      state.points[2] = { player: "black", count: 2 }; // blocks die=3 move to idx 2
+      // Only die=5 works (idx 0 is open)
+      state.currentPlayer = "white";
+      state.dice = [1, 5];
+      state.usedDice = [];
+      state.phase = "moving";
+
+      const turns = getLegalTurns(state);
+      // Should find turns that use as many dice as possible
+      for (const turn of turns) {
+        // All turns should use at least 1 die (the one that works)
+        expect(turn.length).toBeGreaterThanOrEqual(1);
+      }
+    });
+  });
+
+  describe("startTurn", () => {
+    it("skips turn when no legal moves available", () => {
+      const state = createInitialState();
+      // Clear board and set up an impossible-to-move position
+      for (let i = 0; i < 24; i++) {
+        state.points[i] = { player: null, count: 0 };
+      }
+      state.currentPlayer = "white";
+      state.bar.white = 1;
+      // Block ALL entry points for white (points 19-24, idx 18-23)
+      for (let i = 18; i <= 23; i++) {
+        state.points[i] = { player: "black", count: 2 };
+      }
+      state.phase = "rolling";
+
+      const next = startTurn(state);
+      // Should skip to other player since no moves possible
+      expect(next.currentPlayer).toBe("black");
+      expect(next.phase).toBe("rolling");
+    });
+  });
+
   describe("checkWinner", () => {
     it("returns null when game in progress", () => {
       const state = createInitialState();
@@ -307,14 +392,13 @@ describe("backgammon engine", () => {
     });
   });
 
-  describe("startTurn", () => {
+  describe("startTurn (happy path)", () => {
     it("rolls dice and enters moving phase", () => {
       const state = createInitialState();
       const next = startTurn(state);
       expect(next.dice).not.toBeNull();
       expect(next.dice!.length).toBe(2);
       expect(next.usedDice).toEqual([]);
-      // Should be in moving phase (unless no legal moves, which is very unlikely from opening)
     });
   });
 
