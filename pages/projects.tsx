@@ -6,10 +6,10 @@ import type { ProjectEntry } from "../data/projects";
 import ProjectCard from "../components/ProjectCard/ProjectCard";
 import styles from "../styles/Projects.module.css";
 
-type CompanyFilter = "All" | "Copy.ai" | "Jopwell";
+type CompanyFilter = "All" | "DDC" | "Copy.ai" | "Jopwell";
 type TypeFilter = "All" | "Feature" | "Architecture" | "DX";
 
-const companyOptions: CompanyFilter[] = ["All", "Copy.ai", "Jopwell"];
+const companyOptions: CompanyFilter[] = ["All", "DDC", "Copy.ai", "Jopwell"];
 const typeOptions: TypeFilter[] = ["All", "Feature", "Architecture", "DX"];
 
 const Projects: NextPage = () => {
