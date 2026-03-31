@@ -1,4 +1,4 @@
-import type { GameState, Turn, Player } from "./types";
+import type { GameState, Move, Turn, Player } from "./types";
 import {
   getLegalTurns,
   applyMove,
@@ -124,6 +124,11 @@ function evaluate(state: GameState, player: Player): number {
 }
 
 // ── AI Move Selection ────────────────────────────────────
+
+/** Pick the best turn for the current player using heuristic evaluation. */
+export function getAIMove(state: GameState): Move[] {
+  return pickBestTurn(state);
+}
 
 /** Pick the best turn for the current player using heuristic evaluation. */
 export function pickBestTurn(state: GameState): Turn {
