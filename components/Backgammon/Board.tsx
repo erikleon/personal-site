@@ -253,7 +253,7 @@ export default function Board() {
             <div
               className={`${styles.barZone} ${
                 selected === "bar" ? styles.barHighlight : ""
-              } ${state.bar.black > 0 ? "" : ""}`}
+              }`}
               onClick={handleBarClick}
               onDoubleClick={() => handleAutoMove("bar")}
             >
