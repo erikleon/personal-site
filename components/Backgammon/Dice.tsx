@@ -16,7 +16,7 @@ interface DiceProps {
 }
 
 export default function Dice({ dice, usedDice }: DiceProps) {
-  if (!dice) return null;
+  if (!dice) return <div className={styles.diceArea} />;
 
   // Track which dice values have been used
   const used = [...usedDice];
