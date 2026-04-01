@@ -194,6 +194,24 @@ export default function Board() {
     [state, runAiTurn]
   );
 
+  const handleAutoMove = useCallback(
+    (from: number | "bar") => {
+      if (!isPlayerTurn || state.phase !== "moving" || isAiThinking) return;
+      const moves = legalMoves.filter((m) => m.from === from);
+      if (moves.length === 0) return;
+
+      // Prefer bear-off, then largest die move
+      const bearOff = moves.find((m) => m.to === "off");
+      if (bearOff) {
+        applyPlayerMove(bearOff);
+        return;
+      }
+      const best = moves.reduce((a, b) => (b.die > a.die ? b : a));
+      applyPlayerMove(best);
+    },
+    [state, isPlayerTurn, isAiThinking, legalMoves, applyPlayerMove]
+  );
+
   // Board layout: top row is points 13-24 (left to right), bottom row is 12-1
   // Top row: indices 12..23 (left half 12-17, bar, right half 18-23)
   // Bottom row: indices 11..0 (left half 11-6, bar, right half 5-0)
@@ -212,6 +230,7 @@ export default function Board() {
       isLegalTarget={selected !== null && legalTargets.has(index)}
       onClick={() => handlePointClick(index)}
       onCheckerClick={() => handlePointClick(index)}
+      onDoubleClick={() => handleAutoMove(index)}
     />
   );
 
@@ -236,6 +255,7 @@ export default function Board() {
                 selected === "bar" ? styles.barHighlight : ""
               } ${state.bar.black > 0 ? "" : ""}`}
               onClick={handleBarClick}
+              onDoubleClick={() => handleAutoMove("bar")}
             >
               <div className={styles.barCheckers}>
                 {barBlackCount > 0 &&

@@ -10,6 +10,7 @@ interface PointProps {
   isLegalTarget: boolean;
   onClick: () => void;
   onCheckerClick: () => void;
+  onDoubleClick: () => void;
 }
 
 export default function Point({
@@ -20,6 +21,7 @@ export default function Point({
   isLegalTarget,
   onClick,
   onCheckerClick,
+  onDoubleClick,
 }: PointProps) {
   const isDark = index % 2 === 0;
   const clickable = point.count > 0 || isLegalTarget;
@@ -50,7 +52,7 @@ export default function Point({
   const visibleCount = Math.min(point.count, maxVisible);
 
   return (
-    <div className={classNames} onClick={handleClick}>
+    <div className={classNames} onClick={handleClick} onDoubleClick={onDoubleClick}>
       <span className={styles.pointNumber}>{displayNum}</span>
       <div
         className={`${styles.triangle} ${isDark ? styles.triangleDark : styles.triangleLight}`}
