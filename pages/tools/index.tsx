@@ -20,7 +20,7 @@ export default function ToolsIndex() {
   return (
     <>
       <Head>
-        <title>Tools | Erik Leon</title>
+        <title>Tools | Erik Karwatowski</title>
       </Head>
       <div className={styles.container}>
         <h1 className={styles.title}>Tools</h1>
