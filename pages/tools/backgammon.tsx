@@ -16,7 +16,7 @@ export default function BackgammonPage() {
   return (
     <>
       <Head>
-        <title>Backgammon | Erik Leon</title>
+        <title>Backgammon | Erik Karwatowski</title>
       </Head>
       <Board />
     </>
