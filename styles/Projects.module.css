@@ -47,14 +47,14 @@
 }
 
 .filterButtonActive {
-  background: #0e122d;
-  color: #f1f2ed;
+  background: var(--color-dark);
+  color: var(--color-light);
 }
 
 @media (prefers-color-scheme: dark) {
   .filterButtonActive {
-    background: #f1f2ed;
-    color: #0e122d;
+    background: var(--color-light);
+    color: var(--color-dark);
   }
 }
 

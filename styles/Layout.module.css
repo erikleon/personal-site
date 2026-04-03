@@ -8,21 +8,21 @@
 }
 
 .layout.dark {
-  background: #0e122d;
-  color: #f1f2ed;
+  background: var(--color-dark);
+  color: var(--color-light);
 }
 
 .layout.dark a {
-  color: #f1f2ed;
+  color: var(--color-light);
 }
 
 .layout.light {
-  background: #f1f2ed;
-  color: #0e122d;
+  background: var(--color-light);
+  color: var(--color-dark);
 }
 
 .layout.light a {
-  color: #0e122d;
+  color: var(--color-dark);
 }
 
 .layout a {
@@ -31,20 +31,20 @@
 
 @media (prefers-color-scheme: dark) {
   .layout {
-    background: #0e122d;
-    color: #f1f2ed;
+    background: var(--color-dark);
+    color: var(--color-light);
   }
 
   .layout.light {
-    background: #f1f2ed;
-    color: #0e122d;
+    background: var(--color-light);
+    color: var(--color-dark);
   }
 
   .layout.light a {
-    color: #0e122d;
+    color: var(--color-dark);
   }
 
   .layout a {
-    color: #f1f2ed;
+    color: var(--color-light);
   }
 }
