@@ -2,11 +2,22 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Montserret", Arial, sans-serif;
+  font-family: "Montserrat", Arial, sans-serif;
+  line-height: 1.5;
 }
 
 a {
   text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 * {

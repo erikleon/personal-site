@@ -124,7 +124,7 @@
   border: none;
   color: inherit;
   cursor: pointer;
-  padding: 0;
+  padding: 0.5rem 0;
   text-decoration: underline;
 }
 

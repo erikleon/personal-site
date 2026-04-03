@@ -13,7 +13,7 @@
 }
 
 .pageLink {
-  padding: 0 18px;
+  padding: 12px 18px;
   font-family: "Arvo";
 }
 
@@ -29,8 +29,8 @@
   background: linear-gradient(to right, #f1f2ed 50%, #0e122d 50%);
   border: 2px solid #0e122d;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 44px;
+  height: 44px;
   cursor: pointer;
   position: relative;
   color: transparent;
@@ -38,7 +38,7 @@
   transform: rotate(45deg);
   float: right;
   margin: 0 20px 0 0;
-  transition: cubic-bezier(0.075, 0.82, 0.165, 1) 2s all;
+  transition: background-position 2s cubic-bezier(0.075, 0.82, 0.165, 1);
   background-size: 200%;
   background-position: 25% 50%;
 }

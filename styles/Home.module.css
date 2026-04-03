@@ -4,6 +4,10 @@
   margin: 0 auto;
 }
 
+.home {
+  max-width: 65ch;
+}
+
 .main {
   min-height: 100vh;
   padding: 4rem 0;
