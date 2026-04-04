@@ -4,13 +4,17 @@ import styles from "../../styles/Projects.module.css";
 
 interface ProjectCardProps {
   project: ProjectEntry;
+  theme: "light" | "dark";
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, theme }: ProjectCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className={styles.card}>
+    <div
+      className={`${styles.card} ${theme === "dark" ? styles.cardDark : styles.cardLight}`}
+      onClick={() => setExpanded((prev) => !prev)}
+    >
       <div className={styles.cardHeader}>
         <h3 className={styles.cardName}>{project.name}</h3>
         <span className={styles.cardMeta}>
@@ -32,7 +36,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             aria-expanded={expanded}
             aria-controls={`highlights-${project.name}`}
             className={styles.expandButton}
-            onClick={() => setExpanded((prev) => !prev)}
           >
             {expanded ? "Hide highlights" : "Show highlights"}
           </button>

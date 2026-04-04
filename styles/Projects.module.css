@@ -39,7 +39,9 @@
   background: transparent;
   color: inherit;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 .filterButton:hover {
@@ -64,8 +66,14 @@
   transition: box-shadow 0.2s;
 }
 
-.card:hover {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+.cardLight:hover {
+  box-shadow: 0 2px 12px rgba(14, 18, 45, 0.15);
+  cursor: pointer;
+}
+
+.cardDark:hover {
+  box-shadow: 0 2px 12px rgba(241, 242, 237, 0.75);
+  cursor: pointer;
 }
 
 .cardHeader {
