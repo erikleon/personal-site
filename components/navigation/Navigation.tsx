@@ -11,7 +11,7 @@ const Navigation = ({
 }) => {
   const router = useRouter();
   const linkClass = (href: string) =>
-    `${styles.pageLink} ${router.pathname === href ? styles.pageLinkActive : ""}`;
+    `${router.pathname === href ? styles.pageLinkActive : ""} ${styles.pageLink} `;
 
   return (
     <header className={styles.header}>
@@ -32,16 +32,16 @@ const Navigation = ({
           Projects
         </Link>
 
-      <button
-        id="themeToggleButton"
-        aria-label="Toggle theme"
-        className={`${styles.themeToggleButton} ${theme === "dark" ? styles.dark : styles.light}`}
-        onClick={handleThemeToggle}
-      >
-        Toggle Theme
-      </button>
-    </nav>
-  </header>
+        <button
+          id="themeToggleButton"
+          aria-label="Toggle theme"
+          className={`${styles.themeToggleButton} ${theme === "dark" ? styles.dark : styles.light}`}
+          onClick={handleThemeToggle}
+        >
+          Toggle Theme
+        </button>
+      </nav>
+    </header>
   );
 };
 
