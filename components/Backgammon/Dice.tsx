@@ -1,5 +1,9 @@
+import { useState, useEffect, useRef } from "react";
 import type { Player } from "../../lib/backgammon/types";
 import styles from "../../styles/Backgammon.module.css";
+
+const ROLL_DURATION = 600; // ms
+const CYCLE_INTERVAL = 75; // ms
 
 // Pip positions on a die face (3x3 grid, 0-indexed)
 const PIP_LAYOUTS: Record<number, [number, number][]> = {
@@ -43,11 +47,74 @@ interface DiceProps {
 }
 
 export default function Dice({ dice, usedDice, player }: DiceProps) {
-  if (!dice) return <div className={styles.diceArea} />;
+  // Use a stable string key to avoid firing on cloned-array re-renders
+  const diceKey = dice ? `${dice[0]}-${dice[1]}` : null;
 
-  // Track which dice values have been used
+  const [displayDice, setDisplayDice] = useState<[number, number] | null>(dice);
+  const [isRolling, setIsRolling] = useState(false);
+  const prevKeyRef = useRef<string | null>(diceKey);
+
+  useEffect(() => {
+    const prevKey = prevKeyRef.current;
+    prevKeyRef.current = diceKey;
+
+    if (diceKey === null) {
+      setDisplayDice(null);
+      setIsRolling(false);
+      return;
+    }
+
+    // Dice was already showing (e.g. usedDice changed, not a new roll)
+    if (prevKey !== null) {
+      setDisplayDice(dice);
+      return;
+    }
+
+    // Dice just appeared: animate
+    const finalDice = dice; // capture at effect time; dice prop may change
+    setIsRolling(true);
+    const interval = setInterval(() => {
+      setDisplayDice([
+        (Math.floor(Math.random() * 6) + 1) as 1 | 2 | 3 | 4 | 5 | 6,
+        (Math.floor(Math.random() * 6) + 1) as 1 | 2 | 3 | 4 | 5 | 6,
+      ]);
+    }, CYCLE_INTERVAL);
+
+    const timeout = setTimeout(() => {
+      clearInterval(interval);
+      setDisplayDice(finalDice);
+      setIsRolling(false);
+    }, ROLL_DURATION);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [diceKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!displayDice) return <div className={styles.diceArea} />;
+
+  // While rolling, show 2 cycling dice (doubles resolved after settle)
+  if (isRolling) {
+    return (
+      <div className={styles.diceArea}>
+        {displayDice.map((v, i) => (
+          <DieFace
+            key={i}
+            value={v}
+            used={false}
+            player={player}
+            rolling
+            rollDelay={i * 60}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  // Settled: show real dice with used state (use displayDice — dice prop may be null already)
   const used = [...usedDice];
-  const dieStates = dice.map((value) => {
+  const dieStates = displayDice.map((value) => {
     const idx = used.indexOf(value);
     if (idx !== -1) {
       used.splice(idx, 1);
@@ -57,16 +124,23 @@ export default function Dice({ dice, usedDice, player }: DiceProps) {
   });
 
   // For doubles, show 4 dice
-  if (dice[0] === dice[1]) {
-    const totalUsed = usedDice.filter((d) => d === dice[0]).length;
+  if (displayDice[0] === displayDice[1]) {
+    const totalUsed = usedDice.filter((d) => d === displayDice[0]).length;
     const allDice = Array.from({ length: 4 }, (_, i) => ({
-      value: dice[0],
+      value: displayDice[0],
       isUsed: i < totalUsed,
     }));
     return (
       <div className={styles.diceArea}>
         {allDice.map((d, i) => (
-          <DieFace key={i} value={d.value} used={d.isUsed} player={player} />
+          <DieFace
+            key={i}
+            value={d.value}
+            used={d.isUsed}
+            player={player}
+            rolling={false}
+            rollDelay={0}
+          />
         ))}
       </div>
     );
@@ -75,7 +149,14 @@ export default function Dice({ dice, usedDice, player }: DiceProps) {
   return (
     <div className={styles.diceArea}>
       {dieStates.map((d, i) => (
-        <DieFace key={i} value={d.value} used={d.isUsed} player={player} />
+        <DieFace
+          key={i}
+          value={d.value}
+          used={d.isUsed}
+          player={player}
+          rolling={false}
+          rollDelay={0}
+        />
       ))}
     </div>
   );
@@ -85,10 +166,14 @@ function DieFace({
   value,
   used,
   player,
+  rolling,
+  rollDelay,
 }: {
   value: number;
   used: boolean;
   player: Player;
+  rolling: boolean;
+  rollDelay: number;
 }) {
   const pips = PIP_LAYOUTS[value] || [];
   const grid = Array.from({ length: 9 }, (_, i) => {
@@ -102,7 +187,12 @@ function DieFace({
 
   return (
     <div
-      className={`${styles.die} ${playerClass} ${used ? styles.dieUsed : ""}`}
+      className={`${styles.die} ${playerClass} ${used ? styles.dieUsed : ""} ${rolling ? styles.dieRolling : ""}`}
+      style={
+        rolling && rollDelay > 0
+          ? { animationDelay: `${rollDelay}ms` }
+          : undefined
+      }
     >
       {grid.map((hasPip, i) => (
         <span
