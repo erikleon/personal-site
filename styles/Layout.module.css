@@ -8,43 +8,27 @@
 }
 
 .layout.dark {
-  background: #0e122d;
-  color: #f1f2ed;
+  --color-fg: var(--color-light);
+  --color-bg: var(--color-dark);
+  background: var(--color-bg);
+  color: var(--color-fg);
 }
 
 .layout.dark a {
-  color: #f1f2ed;
+  color: var(--color-fg);
 }
 
 .layout.light {
-  background: #f1f2ed;
-  color: #0e122d;
+  --color-fg: var(--color-dark);
+  --color-bg: var(--color-light);
+  background: var(--color-bg);
+  color: var(--color-fg);
 }
 
 .layout.light a {
-  color: #0e122d;
+  color: var(--color-fg);
 }
 
 .layout a {
   text-decoration: underline;
-}
-
-@media (prefers-color-scheme: dark) {
-  .layout {
-    background: #0e122d;
-    color: #f1f2ed;
-  }
-
-  .layout.light {
-    background: #f1f2ed;
-    color: #0e122d;
-  }
-
-  .layout.light a {
-    color: #0e122d;
-  }
-
-  .layout a {
-    color: #f1f2ed;
-  }
 }

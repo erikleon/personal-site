@@ -1,40 +1,48 @@
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import styles from "../../styles/Navigation.module.css";
 
 const Navigation = ({
   handleThemeToggle,
+  theme,
 }: {
   handleThemeToggle: () => void;
-}) => (
-  <header className="header">
-    <nav>
-      <Link href="/" className={styles.pageLink}>
-        Home
-      </Link>
+  theme: "light" | "dark";
+}) => {
+  const router = useRouter();
+  const linkClass = (href: string) =>
+    `${router.pathname === href ? styles.pageLinkActive : ""} ${styles.pageLink} `;
 
-      <Link href="/about" className={styles.pageLink}>
-        About
-      </Link>
+  return (
+    <header className={styles.header}>
+      <nav>
+        <Link href="/" className={linkClass("/")}>
+          Home
+        </Link>
 
-      <Link href="/work" className={styles.pageLink}>
-        Work
-      </Link>
+        <Link href="/about" className={linkClass("/about")}>
+          About
+        </Link>
 
-      <Link href="/projects" className={styles.pageLink}>
-        Projects
-      </Link>
+        <Link href="/work" className={linkClass("/work")}>
+          Work
+        </Link>
 
-      <button
-        id="themeToggleButton"
-        aria-label="Toggle theme"
-        className={styles.themeToggleButton}
-        onClick={handleThemeToggle}
-      >
-        Toggle Theme
-      </button>
-    </nav>
-  </header>
-);
+        <Link href="/projects" className={linkClass("/projects")}>
+          Projects
+        </Link>
+
+        <button
+          id="themeToggleButton"
+          aria-label="Toggle theme"
+          className={`${styles.themeToggleButton} ${theme === "dark" ? styles.dark : styles.light}`}
+          onClick={handleThemeToggle}
+        >
+          Toggle Theme
+        </button>
+      </nav>
+    </header>
+  );
+};
 
 export default Navigation;

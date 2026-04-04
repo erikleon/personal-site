@@ -1,0 +1,13 @@
+.container {
+  padding: 0 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.content {
+  max-width: 65ch;
+}
+
+a:hover {
+  text-decoration: none;
+}

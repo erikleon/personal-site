@@ -1,3 +1,8 @@
+:root {
+  --color-dark: rgb(14, 18, 45);
+  --color-light: rgb(241, 242, 237);
+}
+
 html,
 body {
   padding: 0;
@@ -8,6 +13,10 @@ body {
 
 a {
   text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
 }
 
 a:focus-visible {

@@ -5,6 +5,7 @@ import { projects } from "../data/projects";
 import type { ProjectEntry } from "../data/projects";
 import ProjectCard from "../components/ProjectCard/ProjectCard";
 import styles from "../styles/Projects.module.css";
+import { useTheme } from "../lib/theme-context";
 
 type CompanyFilter = "All" | "DDC" | "Copy.ai" | "Jopwell";
 type TypeFilter = "All" | "Feature" | "Architecture" | "DX";
@@ -13,6 +14,7 @@ const companyOptions: CompanyFilter[] = ["All", "DDC", "Copy.ai", "Jopwell"];
 const typeOptions: TypeFilter[] = ["All", "Feature", "Architecture", "DX"];
 
 const Projects: NextPage = () => {
+  const theme = useTheme();
   const [companyFilter, setCompanyFilter] = useState<CompanyFilter>("All");
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("All");
 
@@ -68,7 +70,7 @@ const Projects: NextPage = () => {
 
       <div className={styles.grid}>
         {filtered.map((project) => (
-          <ProjectCard key={project.name} project={project} />
+          <ProjectCard key={project.name} project={project} theme={theme} />
         ))}
       </div>
     </div>
