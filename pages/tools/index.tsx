@@ -14,6 +14,11 @@ const tools = [
     description: "Play backgammon against an AI opponent",
     href: "/tools/backgammon",
   },
+  {
+    name: "RSVP Admin",
+    description: "Manage RSVPs for events",
+    href: "/admin/rsvps",
+  },
 ];
 
 export default function ToolsIndex() {
