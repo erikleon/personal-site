@@ -21,6 +21,11 @@
   text-decoration: none;
 }
 
+.pageLinkActive {
+  text-decoration: none;
+  opacity: 0.6;
+}
+
 .dark {
   border-color: var(--color-light);
 }

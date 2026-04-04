@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import styles from "../../styles/Navigation.module.css";
 
 const Navigation = ({
@@ -7,24 +8,29 @@ const Navigation = ({
 }: {
   handleThemeToggle: () => void;
   theme: "light" | "dark";
-}) => (
-  <header className={styles.header}>
-    <nav>
-      <Link href="/" className={styles.pageLink}>
-        Home
-      </Link>
+}) => {
+  const router = useRouter();
+  const linkClass = (href: string) =>
+    `${styles.pageLink} ${router.pathname === href ? styles.pageLinkActive : ""}`;
 
-      <Link href="/about" className={styles.pageLink}>
-        About
-      </Link>
+  return (
+    <header className={styles.header}>
+      <nav>
+        <Link href="/" className={linkClass("/")}>
+          Home
+        </Link>
 
-      <Link href="/work" className={styles.pageLink}>
-        Work
-      </Link>
+        <Link href="/about" className={linkClass("/about")}>
+          About
+        </Link>
 
-      <Link href="/projects" className={styles.pageLink}>
-        Projects
-      </Link>
+        <Link href="/work" className={linkClass("/work")}>
+          Work
+        </Link>
+
+        <Link href="/projects" className={linkClass("/projects")}>
+          Projects
+        </Link>
 
       <button
         id="themeToggleButton"
@@ -36,6 +42,7 @@ const Navigation = ({
       </button>
     </nav>
   </header>
-);
+  );
+};
 
 export default Navigation;
