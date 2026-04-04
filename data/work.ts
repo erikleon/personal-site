@@ -30,7 +30,7 @@ export const work: WorkEntry[] = [
   {
     company: "Copy.ai",
     title: "Full-Stack Engineer",
-    period: "2021–2024",
+    period: "2022–2024",
     stack: ["NestJS", "MongoDB", "Next.js", "BullMQ"],
     highlights: [
       "Led integration of OneSchema for scalable CSV imports, reducing support tickets by 40%",
