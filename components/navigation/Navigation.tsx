@@ -3,8 +3,10 @@ import styles from "../../styles/Navigation.module.css";
 
 const Navigation = ({
   handleThemeToggle,
+  theme,
 }: {
   handleThemeToggle: () => void;
+  theme: "light" | "dark";
 }) => (
   <header className={styles.header}>
     <nav>
@@ -27,7 +29,7 @@ const Navigation = ({
       <button
         id="themeToggleButton"
         aria-label="Toggle theme"
-        className={styles.themeToggleButton}
+        className={`${styles.themeToggleButton} ${theme === "dark" ? styles.dark : styles.light}`}
         onClick={handleThemeToggle}
       >
         Toggle Theme
