@@ -35,20 +35,16 @@ export default function Board() {
   // Get legal moves from the selected source
   const legalMoves = getLegalMoves(state);
   const movesFromSelected =
-    selected !== null
-      ? legalMoves.filter((m) => m.from === selected)
-      : [];
+    selected !== null ? legalMoves.filter((m) => m.from === selected) : [];
 
   // Legal target indices for the selected checker
-  const legalTargets = new Set(
-    movesFromSelected.map((m) => m.to)
-  );
+  const legalTargets = new Set(movesFromSelected.map((m) => m.to));
 
   // Which points have checkers the player can move
   const movableSources = new Set(
     isPlayerTurn && state.phase === "moving"
       ? legalMoves.map((m) => m.from)
-      : []
+      : [],
   );
 
   const handleRoll = useCallback(() => {
@@ -144,7 +140,15 @@ export default function Board() {
 
       setSelected(null);
     },
-    [state, selected, isPlayerTurn, isAiThinking, legalTargets, movableSources, movesFromSelected]
+    [
+      state,
+      selected,
+      isPlayerTurn,
+      isAiThinking,
+      legalTargets,
+      movableSources,
+      movesFromSelected,
+    ],
   );
 
   const handleBarClick = useCallback(() => {
@@ -160,7 +164,14 @@ export default function Board() {
       const move = movesFromSelected.find((m) => m.to === "off");
       if (move) applyPlayerMove(move);
     }
-  }, [state, selected, isPlayerTurn, isAiThinking, legalTargets, movesFromSelected]);
+  }, [
+    state,
+    selected,
+    isPlayerTurn,
+    isAiThinking,
+    legalTargets,
+    movesFromSelected,
+  ]);
 
   const applyPlayerMove = useCallback(
     (move: Move) => {
@@ -173,7 +184,10 @@ export default function Board() {
       if (remaining.length === 0) {
         const ended = endTurn(next);
         setState(ended);
-        if (ended.phase !== "finished" && ended.currentPlayer !== HUMAN_PLAYER) {
+        if (
+          ended.phase !== "finished" &&
+          ended.currentPlayer !== HUMAN_PLAYER
+        ) {
           runAiTurn(ended);
         }
       } else {
@@ -191,7 +205,7 @@ export default function Board() {
         }
       }
     },
-    [state, runAiTurn]
+    [state, runAiTurn],
   );
 
   const handleAutoMove = useCallback(
@@ -209,7 +223,7 @@ export default function Board() {
       const best = moves.reduce((a, b) => (b.die > a.die ? b : a));
       applyPlayerMove(best);
     },
-    [state, isPlayerTurn, isAiThinking, legalMoves, applyPlayerMove]
+    [state, isPlayerTurn, isAiThinking, legalMoves, applyPlayerMove],
   );
 
   // Board layout: top row is points 13-24 (left to right), bottom row is 12-1
@@ -244,7 +258,14 @@ export default function Board() {
       <GameStatus state={state} isAiThinking={isAiThinking} />
 
       <div className={styles.board}>
-        <div className={styles.boardInner}>
+        <div
+          className={styles.boardInner}
+          onClick={() => {
+            if (state.phase === "rolling" && isPlayerTurn && !isAiThinking) {
+              handleRoll();
+            }
+          }}
+        >
           {/* Top half: points 13-24, black's home side on right */}
           <div className={styles.halfRow}>
             <div className={styles.pointsGroup}>
@@ -259,46 +280,40 @@ export default function Board() {
             >
               <div className={styles.barCheckers}>
                 {barBlackCount > 0 &&
-                  Array.from(
-                    { length: Math.min(barBlackCount, 3) },
-                    (_, i) => (
-                      <div
-                        key={`bb-${i}`}
-                        className={`${styles.checker} ${styles.checkerBlack}`}
-                      >
-                        {i === Math.min(barBlackCount, 3) - 1 &&
-                          barBlackCount > 3 && (
-                            <span className={styles.checkerCount}>
-                              {barBlackCount}
-                            </span>
-                          )}
-                      </div>
-                    )
-                  )}
+                  Array.from({ length: Math.min(barBlackCount, 3) }, (_, i) => (
+                    <div
+                      key={`bb-${i}`}
+                      className={`${styles.checker} ${styles.checkerBlack}`}
+                    >
+                      {i === Math.min(barBlackCount, 3) - 1 &&
+                        barBlackCount > 3 && (
+                          <span className={styles.checkerCount}>
+                            {barBlackCount}
+                          </span>
+                        )}
+                    </div>
+                  ))}
               </div>
               <span className={styles.barLabel}>BAR</span>
               <div className={styles.barCheckers}>
                 {barWhiteCount > 0 &&
-                  Array.from(
-                    { length: Math.min(barWhiteCount, 3) },
-                    (_, i) => (
-                      <div
-                        key={`bw-${i}`}
-                        className={`${styles.checker} ${styles.checkerWhite} ${
-                          selected === "bar" && i === 0
-                            ? styles.checkerSelected
-                            : ""
-                        }`}
-                      >
-                        {i === Math.min(barWhiteCount, 3) - 1 &&
-                          barWhiteCount > 3 && (
-                            <span className={styles.checkerCount}>
-                              {barWhiteCount}
-                            </span>
-                          )}
-                      </div>
-                    )
-                  )}
+                  Array.from({ length: Math.min(barWhiteCount, 3) }, (_, i) => (
+                    <div
+                      key={`bw-${i}`}
+                      className={`${styles.checker} ${styles.checkerWhite} ${
+                        selected === "bar" && i === 0
+                          ? styles.checkerSelected
+                          : ""
+                      }`}
+                    >
+                      {i === Math.min(barWhiteCount, 3) - 1 &&
+                        barWhiteCount > 3 && (
+                          <span className={styles.checkerCount}>
+                            {barWhiteCount}
+                          </span>
+                        )}
+                    </div>
+                  ))}
               </div>
             </div>
             <div className={styles.pointsGroup}>
@@ -318,7 +333,11 @@ export default function Board() {
           </div>
 
           {/* Dice in the middle */}
-          <Dice dice={state.dice} usedDice={state.usedDice} />
+          <Dice
+            dice={state.dice}
+            usedDice={state.usedDice}
+            player={state.currentPlayer}
+          />
 
           {/* Bottom half: points 12-1, white's home side on right */}
           <div className={styles.halfRow}>
