@@ -29,6 +29,10 @@
   margin-bottom: 2.5rem;
 }
 
+.entry:hover .entryHeader .company {
+  text-decoration: underline;
+}
+
 .entry::before {
   content: "";
   position: absolute;
