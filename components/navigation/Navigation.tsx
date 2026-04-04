@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import styles from "../../styles/Navigation.module.css";
 
 const Navigation = ({
@@ -7,7 +6,7 @@ const Navigation = ({
 }: {
   handleThemeToggle: () => void;
 }) => (
-  <header className="header">
+  <header className={styles.header}>
     <nav>
       <Link href="/" className={styles.pageLink}>
         Home
