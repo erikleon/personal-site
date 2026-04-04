@@ -23,23 +23,17 @@
 }
 
 .wrap {
-  border-right: 0.08em solid var(--color-dark);
-  animation: blink-caret .5s step-end infinite;
+  border-right: 0.08em solid var(--color-fg, var(--color-dark));
+  animation: blink-caret 0.5s step-end infinite;
   word-wrap: break-word;
 }
 
 @keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: var(--color-dark) }
-}
-
-@media (prefers-color-scheme: dark) {
-  .wrap {
-    border-right: 0.08em solid var(--color-light);
+  from,
+  to {
+    border-color: transparent;
   }
-
-  @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: var(--color-light) }
+  50% {
+    border-color: var(--color-fg, var(--color-dark));
   }
 }

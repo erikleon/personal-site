@@ -47,15 +47,8 @@
 }
 
 .filterButtonActive {
-  background: var(--color-dark);
-  color: var(--color-light);
-}
-
-@media (prefers-color-scheme: dark) {
-  .filterButtonActive {
-    background: var(--color-light);
-    color: var(--color-dark);
-  }
+  background: var(--color-fg, var(--color-dark));
+  color: var(--color-bg, var(--color-light));
 }
 
 .grid {

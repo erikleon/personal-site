@@ -8,43 +8,27 @@
 }
 
 .layout.dark {
-  background: var(--color-dark);
-  color: var(--color-light);
+  --color-fg: var(--color-light);
+  --color-bg: var(--color-dark);
+  background: var(--color-bg);
+  color: var(--color-fg);
 }
 
 .layout.dark a {
-  color: var(--color-light);
+  color: var(--color-fg);
 }
 
 .layout.light {
-  background: var(--color-light);
-  color: var(--color-dark);
+  --color-fg: var(--color-dark);
+  --color-bg: var(--color-light);
+  background: var(--color-bg);
+  color: var(--color-fg);
 }
 
 .layout.light a {
-  color: var(--color-dark);
+  color: var(--color-fg);
 }
 
 .layout a {
   text-decoration: underline;
-}
-
-@media (prefers-color-scheme: dark) {
-  .layout {
-    background: var(--color-dark);
-    color: var(--color-light);
-  }
-
-  .layout.light {
-    background: var(--color-light);
-    color: var(--color-dark);
-  }
-
-  .layout.light a {
-    color: var(--color-dark);
-  }
-
-  .layout a {
-    color: var(--color-light);
-  }
 }

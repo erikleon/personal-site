@@ -17,6 +17,10 @@
   font-family: "Arvo";
 }
 
+.pageLink:hover {
+  text-decoration: none;
+}
+
 .dark {
   border-color: var(--color-light);
 }
@@ -26,7 +30,11 @@
 }
 
 .themeToggleButton {
-  background: linear-gradient(to right, var(--color-light) 50%, var(--color-dark) 50%);
+  background: linear-gradient(
+    to right,
+    var(--color-light) 50%,
+    var(--color-dark) 50%
+  );
   border: 2px solid var(--color-dark);
   border-radius: 50%;
   width: 44px;
@@ -49,4 +57,15 @@
 
 .themeToggleButton.dark {
   border-color: var(--color-light);
+  background: linear-gradient(
+    to right,
+    var(--color-dark) 50%,
+    var(--color-light) 50%
+  );
+  background-size: 200%;
+  background-position: 25% 50%;
+}
+
+.themeToggleButton.light {
+  border-color: var(--color-dark);
 }
