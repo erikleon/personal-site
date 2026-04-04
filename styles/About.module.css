@@ -7,3 +7,7 @@
 .content {
   max-width: 65ch;
 }
+
+a:hover {
+  text-decoration: none;
+}
