@@ -1,10 +1,18 @@
 import { Redis } from "@upstash/redis";
 import { v4 as uuidv4 } from "uuid";
 
+const KEY_PREFIX =
+  process.env.NODE_ENV === "production" ? "" : "dev:";
+
+export function redisKey(key: string): string {
+  return `${KEY_PREFIX}${key}`;
+}
+
 export interface RSVP {
   id: string;
   slug: string;
   name: string;
+  attending: boolean;
   guestCount: number;
   contact: string;
   note?: string;
@@ -17,7 +25,7 @@ function getRedis() {
 
 export async function saveRSVP(
   slug: string,
-  data: { name: string; guestCount: number; contact: string; note?: string }
+  data: { name: string; attending: boolean; guestCount: number; contact: string; note?: string }
 ): Promise<RSVP> {
   const redis = getRedis();
   const id = uuidv4();
@@ -25,15 +33,16 @@ export async function saveRSVP(
     id,
     slug,
     name: data.name,
-    guestCount: data.guestCount,
+    attending: data.attending,
+    guestCount: data.attending ? data.guestCount : 0,
     contact: data.contact,
     note: data.note,
     createdAt: new Date().toISOString(),
   };
 
   const pipeline = redis.pipeline();
-  pipeline.set(`rsvp:${slug}:${id}`, JSON.stringify(rsvp));
-  pipeline.sadd(`rsvp-index:${slug}`, id);
+  pipeline.set(redisKey(`rsvp:${slug}:${id}`), JSON.stringify(rsvp));
+  pipeline.sadd(redisKey(`rsvp-index:${slug}`), id);
   await pipeline.exec();
 
   return rsvp;
@@ -41,11 +50,11 @@ export async function saveRSVP(
 
 export async function getRSVPs(slug: string): Promise<RSVP[]> {
   const redis = getRedis();
-  const ids = await redis.smembers(`rsvp-index:${slug}`);
+  const ids = await redis.smembers(redisKey(`rsvp-index:${slug}`));
 
   if (ids.length === 0) return [];
 
-  const keys = ids.map((id) => `rsvp:${slug}:${id}`);
+  const keys = ids.map((id) => redisKey(`rsvp:${slug}:${id}`));
   const results = await redis.mget<string[]>(...keys);
 
   return results
