@@ -1,5 +1,5 @@
 .container {
-  padding: 0 2rem;
+  padding: 0 var(--space-xl);
   max-width: 960px;
   margin: 0 auto;
 }
@@ -12,7 +12,7 @@
 }
 
 .playlistWrapper {
-  padding: 16px 0;
+  padding: var(--space-md) 0;
   max-width: 100%;
 }
 
@@ -20,7 +20,7 @@
   max-width: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .playlistsContainer {
     flex-direction: column;
     align-items: center;
