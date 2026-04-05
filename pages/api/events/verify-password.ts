@@ -3,13 +3,14 @@ import bcrypt from "bcryptjs";
 import { Redis } from "@upstash/redis";
 import { events } from "../../../data/events";
 import { isValidSlug, makeSetCookieHeader } from "../../../lib/event-cookie";
+import { redisKey } from "../../../lib/rsvp";
 
 const MAX_ATTEMPTS = 5;
 const WINDOW_SECONDS = 300; // 5 minutes
 
 async function isRateLimited(ip: string, slug: string): Promise<boolean> {
   const redis = Redis.fromEnv();
-  const key = `ratelimit:password:${ip}:${slug}`;
+  const key = redisKey(`ratelimit:password:${ip}:${slug}`);
   const attempts = (await redis.get<number>(key)) ?? 0;
   if (attempts >= MAX_ATTEMPTS) return true;
   await redis.incr(key);
