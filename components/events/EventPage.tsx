@@ -55,7 +55,7 @@ export default function EventPage({ event, themeStyles }: EventPageProps) {
         {event.description}
       </p>
 
-      {rsvp && event.heroEmoji && <EmojiRain emoji={event.heroEmoji} />}
+      {rsvp && rsvp.attending && event.heroEmoji && <EmojiRain emoji={event.heroEmoji} />}
 
       {rsvp ? (
         <RSVPSuccess rsvp={rsvp} />
