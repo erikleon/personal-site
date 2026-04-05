@@ -21,6 +21,7 @@ export default function Board() {
   const [state, setState] = useState<GameState>(createInitialState);
   const [selected, setSelected] = useState<number | "bar" | null>(null);
   const [isAiThinking, setIsAiThinking] = useState(false);
+  const [twoPlayer, setTwoPlayer] = useState(false);
   const aiTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Clean up AI timeout on unmount
@@ -30,7 +31,7 @@ export default function Board() {
     };
   }, []);
 
-  const isPlayerTurn = state.currentPlayer === HUMAN_PLAYER;
+  const isPlayerTurn = twoPlayer || state.currentPlayer === HUMAN_PLAYER;
 
   // Get legal moves from the selected source
   const legalMoves = getLegalMoves(state);
@@ -53,11 +54,15 @@ export default function Board() {
     setState(next);
     setSelected(null);
 
-    // If turn was skipped (no legal moves), AI goes
-    if (next.currentPlayer !== HUMAN_PLAYER && next.phase === "rolling") {
+    // If turn was skipped (no legal moves), AI goes (only in single-player)
+    if (
+      !twoPlayer &&
+      next.currentPlayer !== HUMAN_PLAYER &&
+      next.phase === "rolling"
+    ) {
       runAiTurn(next);
     }
-  }, [state, isPlayerTurn]);
+  }, [state, isPlayerTurn, twoPlayer]);
 
   const handleEndTurn = useCallback(() => {
     if (remainingDice(state).length > 0) return;
@@ -65,13 +70,25 @@ export default function Board() {
     setState(next);
     setSelected(null);
 
-    if (next.phase !== "finished" && next.currentPlayer !== HUMAN_PLAYER) {
+    if (
+      !twoPlayer &&
+      next.phase !== "finished" &&
+      next.currentPlayer !== HUMAN_PLAYER
+    ) {
       runAiTurn(next);
     }
-  }, [state]);
+  }, [state, twoPlayer]);
 
   const handleNewGame = useCallback(() => {
     if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
+    setState(createInitialState());
+    setSelected(null);
+    setIsAiThinking(false);
+  }, []);
+
+  const handleToggleMode = useCallback(() => {
+    if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
+    setTwoPlayer((prev) => !prev);
     setState(createInitialState());
     setSelected(null);
     setIsAiThinking(false);
@@ -185,6 +202,7 @@ export default function Board() {
         const ended = endTurn(next);
         setState(ended);
         if (
+          !twoPlayer &&
           ended.phase !== "finished" &&
           ended.currentPlayer !== HUMAN_PLAYER
         ) {
@@ -197,6 +215,7 @@ export default function Board() {
           const ended = endTurn(next);
           setState(ended);
           if (
+            !twoPlayer &&
             ended.phase !== "finished" &&
             ended.currentPlayer !== HUMAN_PLAYER
           ) {
@@ -205,7 +224,7 @@ export default function Board() {
         }
       }
     },
-    [state, runAiTurn],
+    [state, runAiTurn, twoPlayer],
   );
 
   const handleAutoMove = useCallback(
@@ -255,7 +274,11 @@ export default function Board() {
     <div className={styles.container}>
       <h1 className={styles.title}>Backgammon</h1>
 
-      <GameStatus state={state} isAiThinking={isAiThinking} />
+      <GameStatus
+        state={state}
+        isAiThinking={isAiThinking}
+        twoPlayer={twoPlayer}
+      />
 
       <div className={styles.board}>
         <div
@@ -376,9 +399,11 @@ export default function Board() {
         state={state}
         isPlayerTurn={isPlayerTurn}
         isAiThinking={isAiThinking}
+        twoPlayer={twoPlayer}
         onRoll={handleRoll}
         onEndTurn={handleEndTurn}
         onNewGame={handleNewGame}
+        onToggleMode={handleToggleMode}
       />
     </div>
   );
