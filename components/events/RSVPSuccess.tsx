@@ -6,6 +6,17 @@ interface RSVPSuccessProps {
 }
 
 export default function RSVPSuccess({ rsvp }: RSVPSuccessProps) {
+  if (!rsvp.attending) {
+    return (
+      <div className={styles.container}>
+        <h2 className={styles.heading}>Thanks for letting us know</h2>
+        <p className={styles.message}>
+          Sorry you can't make it, <strong>{rsvp.name}</strong>. We'll miss you!
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>You're in!</h2>
