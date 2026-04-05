@@ -29,7 +29,9 @@ export default function AdminRSVPs() {
       .catch(() => setLoading(false));
   }, [selectedSlug]);
 
-  const totalGuests = rsvps.reduce((sum, r) => sum + r.guestCount, 0);
+  const attendingRsvps = rsvps.filter((r) => r.attending !== false);
+  const decliningRsvps = rsvps.filter((r) => r.attending === false);
+  const totalGuests = attendingRsvps.reduce((sum, r) => sum + r.guestCount, 0);
 
   return (
     <>
@@ -62,14 +64,16 @@ export default function AdminRSVPs() {
             ) : (
               <>
                 <p className={styles.summary}>
-                  {rsvps.length} {rsvps.length === 1 ? "RSVP" : "RSVPs"},{" "}
-                  {totalGuests} total {totalGuests === 1 ? "guest" : "guests"}
+                  {attendingRsvps.length} attending ({totalGuests}{" "}
+                  {totalGuests === 1 ? "guest" : "guests"}),{" "}
+                  {decliningRsvps.length} declined
                 </p>
                 <div className={styles.tableWrapper}>
                   <table className={styles.table}>
                     <thead>
                       <tr>
                         <th>Name</th>
+                        <th>Status</th>
                         <th>Guests</th>
                         <th>Contact</th>
                         <th>Note</th>
@@ -80,7 +84,8 @@ export default function AdminRSVPs() {
                       {rsvps.map((r) => (
                         <tr key={r.id}>
                           <td>{r.name}</td>
-                          <td>{r.guestCount}</td>
+                          <td>{r.attending === false ? "Declined" : "Attending"}</td>
+                          <td>{r.attending === false ? "—" : r.guestCount}</td>
                           <td>{r.contact}</td>
                           <td>{r.note || "—"}</td>
                           <td>
