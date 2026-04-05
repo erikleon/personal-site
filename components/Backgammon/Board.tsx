@@ -21,6 +21,7 @@ export default function Board() {
   const [state, setState] = useState<GameState>(createInitialState);
   const [selected, setSelected] = useState<number | "bar" | null>(null);
   const [isAiThinking, setIsAiThinking] = useState(false);
+  const [twoPlayer, setTwoPlayer] = useState(false);
   const aiTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Clean up AI timeout on unmount
@@ -30,25 +31,21 @@ export default function Board() {
     };
   }, []);
 
-  const isPlayerTurn = state.currentPlayer === HUMAN_PLAYER;
+  const isPlayerTurn = twoPlayer || state.currentPlayer === HUMAN_PLAYER;
 
   // Get legal moves from the selected source
   const legalMoves = getLegalMoves(state);
   const movesFromSelected =
-    selected !== null
-      ? legalMoves.filter((m) => m.from === selected)
-      : [];
+    selected !== null ? legalMoves.filter((m) => m.from === selected) : [];
 
   // Legal target indices for the selected checker
-  const legalTargets = new Set(
-    movesFromSelected.map((m) => m.to)
-  );
+  const legalTargets = new Set(movesFromSelected.map((m) => m.to));
 
   // Which points have checkers the player can move
   const movableSources = new Set(
     isPlayerTurn && state.phase === "moving"
       ? legalMoves.map((m) => m.from)
-      : []
+      : [],
   );
 
   const handleRoll = useCallback(() => {
@@ -57,11 +54,15 @@ export default function Board() {
     setState(next);
     setSelected(null);
 
-    // If turn was skipped (no legal moves), AI goes
-    if (next.currentPlayer !== HUMAN_PLAYER && next.phase === "rolling") {
+    // If turn was skipped (no legal moves), AI goes (only in single-player)
+    if (
+      !twoPlayer &&
+      next.currentPlayer !== HUMAN_PLAYER &&
+      next.phase === "rolling"
+    ) {
       runAiTurn(next);
     }
-  }, [state, isPlayerTurn]);
+  }, [state, isPlayerTurn, twoPlayer]);
 
   const handleEndTurn = useCallback(() => {
     if (remainingDice(state).length > 0) return;
@@ -69,13 +70,25 @@ export default function Board() {
     setState(next);
     setSelected(null);
 
-    if (next.phase !== "finished" && next.currentPlayer !== HUMAN_PLAYER) {
+    if (
+      !twoPlayer &&
+      next.phase !== "finished" &&
+      next.currentPlayer !== HUMAN_PLAYER
+    ) {
       runAiTurn(next);
     }
-  }, [state]);
+  }, [state, twoPlayer]);
 
   const handleNewGame = useCallback(() => {
     if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
+    setState(createInitialState());
+    setSelected(null);
+    setIsAiThinking(false);
+  }, []);
+
+  const handleToggleMode = useCallback(() => {
+    if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
+    setTwoPlayer((prev) => !prev);
     setState(createInitialState());
     setSelected(null);
     setIsAiThinking(false);
@@ -144,7 +157,15 @@ export default function Board() {
 
       setSelected(null);
     },
-    [state, selected, isPlayerTurn, isAiThinking, legalTargets, movableSources, movesFromSelected]
+    [
+      state,
+      selected,
+      isPlayerTurn,
+      isAiThinking,
+      legalTargets,
+      movableSources,
+      movesFromSelected,
+    ],
   );
 
   const handleBarClick = useCallback(() => {
@@ -160,7 +181,14 @@ export default function Board() {
       const move = movesFromSelected.find((m) => m.to === "off");
       if (move) applyPlayerMove(move);
     }
-  }, [state, selected, isPlayerTurn, isAiThinking, legalTargets, movesFromSelected]);
+  }, [
+    state,
+    selected,
+    isPlayerTurn,
+    isAiThinking,
+    legalTargets,
+    movesFromSelected,
+  ]);
 
   const applyPlayerMove = useCallback(
     (move: Move) => {
@@ -173,7 +201,11 @@ export default function Board() {
       if (remaining.length === 0) {
         const ended = endTurn(next);
         setState(ended);
-        if (ended.phase !== "finished" && ended.currentPlayer !== HUMAN_PLAYER) {
+        if (
+          !twoPlayer &&
+          ended.phase !== "finished" &&
+          ended.currentPlayer !== HUMAN_PLAYER
+        ) {
           runAiTurn(ended);
         }
       } else {
@@ -183,6 +215,7 @@ export default function Board() {
           const ended = endTurn(next);
           setState(ended);
           if (
+            !twoPlayer &&
             ended.phase !== "finished" &&
             ended.currentPlayer !== HUMAN_PLAYER
           ) {
@@ -191,7 +224,7 @@ export default function Board() {
         }
       }
     },
-    [state, runAiTurn]
+    [state, runAiTurn, twoPlayer],
   );
 
   const handleAutoMove = useCallback(
@@ -209,7 +242,7 @@ export default function Board() {
       const best = moves.reduce((a, b) => (b.die > a.die ? b : a));
       applyPlayerMove(best);
     },
-    [state, isPlayerTurn, isAiThinking, legalMoves, applyPlayerMove]
+    [state, isPlayerTurn, isAiThinking, legalMoves, applyPlayerMove],
   );
 
   // Board layout: top row is points 13-24 (left to right), bottom row is 12-1
@@ -241,10 +274,21 @@ export default function Board() {
     <div className={styles.container}>
       <h1 className={styles.title}>Backgammon</h1>
 
-      <GameStatus state={state} isAiThinking={isAiThinking} />
+      <GameStatus
+        state={state}
+        isAiThinking={isAiThinking}
+        twoPlayer={twoPlayer}
+      />
 
       <div className={styles.board}>
-        <div className={styles.boardInner}>
+        <div
+          className={styles.boardInner}
+          onClick={() => {
+            if (state.phase === "rolling" && isPlayerTurn && !isAiThinking) {
+              handleRoll();
+            }
+          }}
+        >
           {/* Top half: points 13-24, black's home side on right */}
           <div className={styles.halfRow}>
             <div className={styles.pointsGroup}>
@@ -259,46 +303,40 @@ export default function Board() {
             >
               <div className={styles.barCheckers}>
                 {barBlackCount > 0 &&
-                  Array.from(
-                    { length: Math.min(barBlackCount, 3) },
-                    (_, i) => (
-                      <div
-                        key={`bb-${i}`}
-                        className={`${styles.checker} ${styles.checkerBlack}`}
-                      >
-                        {i === Math.min(barBlackCount, 3) - 1 &&
-                          barBlackCount > 3 && (
-                            <span className={styles.checkerCount}>
-                              {barBlackCount}
-                            </span>
-                          )}
-                      </div>
-                    )
-                  )}
+                  Array.from({ length: Math.min(barBlackCount, 3) }, (_, i) => (
+                    <div
+                      key={`bb-${i}`}
+                      className={`${styles.checker} ${styles.checkerBlack}`}
+                    >
+                      {i === Math.min(barBlackCount, 3) - 1 &&
+                        barBlackCount > 3 && (
+                          <span className={styles.checkerCount}>
+                            {barBlackCount}
+                          </span>
+                        )}
+                    </div>
+                  ))}
               </div>
               <span className={styles.barLabel}>BAR</span>
               <div className={styles.barCheckers}>
                 {barWhiteCount > 0 &&
-                  Array.from(
-                    { length: Math.min(barWhiteCount, 3) },
-                    (_, i) => (
-                      <div
-                        key={`bw-${i}`}
-                        className={`${styles.checker} ${styles.checkerWhite} ${
-                          selected === "bar" && i === 0
-                            ? styles.checkerSelected
-                            : ""
-                        }`}
-                      >
-                        {i === Math.min(barWhiteCount, 3) - 1 &&
-                          barWhiteCount > 3 && (
-                            <span className={styles.checkerCount}>
-                              {barWhiteCount}
-                            </span>
-                          )}
-                      </div>
-                    )
-                  )}
+                  Array.from({ length: Math.min(barWhiteCount, 3) }, (_, i) => (
+                    <div
+                      key={`bw-${i}`}
+                      className={`${styles.checker} ${styles.checkerWhite} ${
+                        selected === "bar" && i === 0
+                          ? styles.checkerSelected
+                          : ""
+                      }`}
+                    >
+                      {i === Math.min(barWhiteCount, 3) - 1 &&
+                        barWhiteCount > 3 && (
+                          <span className={styles.checkerCount}>
+                            {barWhiteCount}
+                          </span>
+                        )}
+                    </div>
+                  ))}
               </div>
             </div>
             <div className={styles.pointsGroup}>
@@ -318,7 +356,11 @@ export default function Board() {
           </div>
 
           {/* Dice in the middle */}
-          <Dice dice={state.dice} usedDice={state.usedDice} />
+          <Dice
+            dice={state.dice}
+            usedDice={state.usedDice}
+            player={state.currentPlayer}
+          />
 
           {/* Bottom half: points 12-1, white's home side on right */}
           <div className={styles.halfRow}>
@@ -357,9 +399,11 @@ export default function Board() {
         state={state}
         isPlayerTurn={isPlayerTurn}
         isAiThinking={isAiThinking}
+        twoPlayer={twoPlayer}
         onRoll={handleRoll}
         onEndTurn={handleEndTurn}
         onNewGame={handleNewGame}
+        onToggleMode={handleToggleMode}
       />
     </div>
   );

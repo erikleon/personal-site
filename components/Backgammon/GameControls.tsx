@@ -6,18 +6,22 @@ interface GameControlsProps {
   state: GameState;
   isPlayerTurn: boolean;
   isAiThinking: boolean;
+  twoPlayer: boolean;
   onRoll: () => void;
   onEndTurn: () => void;
   onNewGame: () => void;
+  onToggleMode: () => void;
 }
 
 export default function GameControls({
   state,
   isPlayerTurn,
   isAiThinking,
+  twoPlayer,
   onRoll,
   onEndTurn,
   onNewGame,
+  onToggleMode,
 }: GameControlsProps) {
   const canRoll = state.phase === "rolling" && isPlayerTurn && !isAiThinking;
   const remaining = remainingDice(state);
@@ -39,6 +43,18 @@ export default function GameControls({
       <button className={styles.btn} onClick={onNewGame}>
         New Game
       </button>
+      <label className={styles.modeToggle}>
+        <span className={styles.modeLabel}>
+          {twoPlayer ? "2 Players" : "vs AI"}
+        </span>
+        <input
+          type="checkbox"
+          checked={twoPlayer}
+          onChange={onToggleMode}
+          className={styles.modeCheckbox}
+        />
+        <span className={styles.modeSwitch} />
+      </label>
     </div>
   );
 }
