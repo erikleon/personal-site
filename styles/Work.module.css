@@ -1,16 +1,16 @@
 .container {
-  padding: 0 2rem;
+  padding: 0 var(--space-xl);
   max-width: 960px;
   margin: 0 auto;
 }
 
 .title {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl);
 }
 
 .timeline {
   position: relative;
-  padding-left: 2rem;
+  padding-left: var(--space-xl);
 }
 
 .timeline::before {
@@ -19,25 +19,26 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: var(--space-2xs);
   background: currentColor;
   opacity: 0.3;
 }
 
 .entry {
   position: relative;
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--space-2xl);
 }
 
 .entry:hover .entryHeader .company {
   text-decoration: underline;
+  color: var(--color-accent);
 }
 
 .entry::before {
   content: "";
   position: absolute;
-  left: -2rem;
-  top: 0.5rem;
+  left: calc(-1 * var(--space-xl));
+  top: var(--space-sm);
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -50,74 +51,76 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   user-select: none;
 }
 
 .entryHeader:focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
+
 .company {
-  font-size: 1.4rem;
+  font-size: var(--text-2xl);
   margin: 0;
+  transition: color var(--duration-fast);
 }
 
 .role {
-  font-size: 1rem;
-  opacity: 0.8;
+  font-size: var(--text-base);
+  color: var(--color-muted);
   margin: 0;
 }
 
 .period {
-  font-size: 0.9rem;
-  opacity: 0.6;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
 }
 
 .stackList {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
   padding: 0;
   list-style: none;
 }
 
 .stackChip {
-  font-size: 0.8rem;
-  padding: 0.2rem 0.6rem;
+  font-size: var(--text-sm);
+  padding: var(--space-2xs) var(--space-sm);
   border: 1px solid currentColor;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   opacity: 0.7;
 }
 
 .highlights {
-  margin-top: 1rem;
-  padding-left: 1.2rem;
+  margin-top: var(--space-md);
+  padding-left: var(--space-lg);
 }
 
 .highlights li {
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
+  margin-bottom: var(--space-sm);
+  line-height: 1.6;
 }
 
 .toggle {
-  font-size: 0.85rem;
-  opacity: 0.6;
-  margin-left: 0.5rem;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  margin-left: var(--space-sm);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .container {
-    padding: 0 1rem;
+    padding: 0 var(--space-md);
   }
 
   .company {
-    font-size: 1.2rem;
+    font-size: var(--text-xl);
   }
 
   .entryHeader {
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--space-xs);
   }
 }
