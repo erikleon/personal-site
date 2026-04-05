@@ -1,5 +1,5 @@
 .layout {
-  padding: 2rem 0;
+  padding: var(--space-xl) 0;
   font-family: "Arvo";
   min-height: 100vh;
   display: flex;
@@ -10,23 +10,29 @@
 .layout.dark {
   --color-fg: var(--color-light);
   --color-bg: var(--color-dark);
+  --color-muted: rgba(241, 242, 237, 0.6);
+  --color-border: rgba(241, 242, 237, 0.2);
+  --color-surface: rgba(241, 242, 237, 0.05);
   background: var(--color-bg);
   color: var(--color-fg);
 }
 
 .layout.dark a {
-  color: var(--color-fg);
+  color: var(--color-accent-text);
 }
 
 .layout.light {
   --color-fg: var(--color-dark);
   --color-bg: var(--color-light);
+  --color-muted: rgba(14, 18, 45, 0.6);
+  --color-border: rgba(14, 18, 45, 0.15);
+  --color-surface: rgba(14, 18, 45, 0.03);
   background: var(--color-bg);
   color: var(--color-fg);
 }
 
 .layout.light a {
-  color: var(--color-fg);
+  color: var(--color-accent-text);
 }
 
 .layout a {
