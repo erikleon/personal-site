@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { projects } from "../data/projects";
+import { projects, personalProjects } from "../data/projects";
 import type { ProjectEntry } from "../data/projects";
 import ProjectCard from "../components/ProjectCard/ProjectCard";
 import styles from "../styles/Projects.module.css";
@@ -70,6 +70,13 @@ const Projects: NextPage = () => {
 
       <div className={styles.grid}>
         {filtered.map((project) => (
+          <ProjectCard key={project.name} project={project} theme={theme} />
+        ))}
+      </div>
+
+      <h2 className={styles.personalHeading}>Personal Projects</h2>
+      <div className={styles.grid}>
+        {personalProjects.map((project) => (
           <ProjectCard key={project.name} project={project} theme={theme} />
         ))}
       </div>

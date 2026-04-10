@@ -5,6 +5,8 @@ export interface ProjectEntry {
   description: string;
   stack: string[];
   highlights: string[];
+  demoUrl?: string;
+  repoUrl?: string;
 }
 
 export const projects: ProjectEntry[] = [
@@ -163,5 +165,30 @@ export const projects: ProjectEntry[] = [
       "Boosted organic search traffic by 35%",
       "Achieved 95+ Lighthouse performance scores",
     ],
+  },
+];
+
+export const personalProjects: ProjectEntry[] = [
+  {
+    name: "minisiwyg-editor",
+    company: "Open Source",
+    type: "DX",
+    description:
+      "A ~4KB gzipped WYSIWYG editor for the browser with a built-in XSS sanitizer. Built on contentEditable and MutationObserver, with a customizable tag/attribute allowlist and a standalone sanitizer module that can be used on its own.",
+    stack: [
+      "TypeScript",
+      "Vanilla JS",
+      "ESM",
+      "contentEditable",
+      "MutationObserver",
+    ],
+    highlights: [
+      "4054 bytes gzipped for the full ESM bundle (all 4 modules)",
+      "Ships a standalone HTML sanitizer that strips scripts and dangerous attributes from pasted content",
+      "Customizable allowlist policy for permitted tags and attributes",
+      "Accessible toolbar with keyboard navigation and ARIA labels",
+    ],
+    demoUrl: "https://erikleon.github.io/minisiwyg-editor/",
+    repoUrl: "https://github.com/erikleon/minisiwyg-editor",
   },
 ];
