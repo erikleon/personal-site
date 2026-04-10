@@ -38,3 +38,6 @@ next-env.d.ts
 # sitemap
 /public/sitemap.xml
 .gstack/
+
+# agent instructions (local-only)
+CLAUDE.md
