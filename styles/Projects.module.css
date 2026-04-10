@@ -119,6 +119,30 @@
   opacity: 0.85;
 }
 
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.link {
+  font-family: "Arvo";
+  font-size: var(--text-sm);
+  color: var(--color-accent-text);
+  text-decoration: underline;
+  transition: color var(--duration-fast);
+}
+
+.link:hover {
+  color: var(--color-accent-hover);
+}
+
+.personalHeading {
+  margin-top: var(--space-3xl);
+  margin-bottom: var(--space-lg);
+}
+
 .expandButton {
   font-family: "Arvo";
   font-size: var(--text-sm);

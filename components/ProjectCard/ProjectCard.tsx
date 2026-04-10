@@ -29,6 +29,32 @@ export default function ProjectCard({ project, theme }: ProjectCardProps) {
           </span>
         ))}
       </div>
+      {(project.demoUrl || project.repoUrl) && (
+        <div className={styles.links}>
+          {project.demoUrl && (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+              onClick={(e) => e.stopPropagation()}
+            >
+              Demo ↗
+            </a>
+          )}
+          {project.repoUrl && (
+            <a
+              href={project.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+              onClick={(e) => e.stopPropagation()}
+            >
+              Repo ↗
+            </a>
+          )}
+        </div>
+      )}
       {project.highlights.length > 0 && (
         <>
           <button
