@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1.1] - 2026-04-12
+
+### Changed
+- Upgraded Next.js from 16.1.6 to 16.2.3 and matched eslint-config-next version
+- Updated `tsconfig.json` `moduleResolution` to `bundler` (required by Next.js 16.2.3)
+- Added `.github/dependabot.yml` with npm groups (react, next, auth, testing, types) and github-actions ecosystem monitoring
+
 ## [0.1.1.0] - 2026-04-09
 
 ### Added
