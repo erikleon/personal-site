@@ -20,8 +20,10 @@ updates:
       next:
         patterns:
           - "next"
-          - "next-auth"
           - "eslint-config-next"
+      auth:
+        patterns:
+          - "next-auth"
       testing:
         patterns:
           - "@testing-library/*"
@@ -39,6 +41,8 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
+    reviewers:
+      - "erikleon"
     labels:
       - "dependencies"
       - "github-actions"
