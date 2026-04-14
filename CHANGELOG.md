@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1.2] - 2026-04-13
+
+### Changed
+- Upgraded `@testing-library/jest-dom` from v5 to v6, removing the transitive `lodash` dependency (resolves 3 Dependabot alerts)
+
 ## [0.1.1.1] - 2026-04-12
 
 ### Changed
