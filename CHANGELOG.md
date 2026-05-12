@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2.0] - 2026-05-12
+
+### Added
+- Event guests who RSVP can now see the full attendee list (who's coming, guest counts, and any notes left by guests)
+- RSVP status persists across page reloads via a secure cookie — returning visitors see their confirmation and the attendee list without re-submitting
+
+### Fixed
+- Added `Secure` flag to the event-access cookie in production environments
+
 ## [0.1.1.2] - 2026-04-13
 
 ### Changed

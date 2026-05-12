@@ -105,6 +105,12 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
     note: trimmedNote,
   });
 
+  const isSecure = process.env.NODE_ENV === "production";
+  res.setHeader(
+    "Set-Cookie",
+    `rsvped-${slug}=${rsvp.id}; Path=/; Max-Age=2592000; HttpOnly; SameSite=Lax${isSecure ? "; Secure" : ""}`
+  );
+
   return res.status(201).json(rsvp);
 }
 

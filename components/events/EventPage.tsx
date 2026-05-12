@@ -4,17 +4,29 @@ import AddToCalendar from "./AddToCalendar";
 import EmojiRain from "./EmojiRain";
 import RSVPForm from "./RSVPForm";
 import RSVPSuccess from "./RSVPSuccess";
+import RSVPList from "./RSVPList";
 import type { EventEntry } from "../../data/events";
-import type { RSVP } from "../../lib/rsvp";
+import type { RSVP, PublicRSVP } from "../../lib/rsvp";
 
 interface EventPageProps {
   event: Omit<EventEntry, "passwordHash">;
+  existingRsvp?: RSVP | null;
+  rsvpList?: PublicRSVP[];
   themeStyles?: Record<string, string>;
 }
 
-export default function EventPage({ event, themeStyles }: EventPageProps) {
-  const [rsvp, setRsvp] = useState<RSVP | null>(null);
+export default function EventPage({ event, existingRsvp, rsvpList: initialList, themeStyles }: EventPageProps) {
+  const [rsvp, setRsvp] = useState<RSVP | null>(existingRsvp ?? null);
+  const [rsvpList, setRsvpList] = useState<PublicRSVP[]>(initialList ?? []);
   const s = themeStyles || styles;
+
+  async function handleRsvpSuccess(newRsvp: RSVP) {
+    setRsvp(newRsvp);
+    const res = await fetch(`/api/events/rsvp-list?slug=${event.slug}`);
+    if (res.ok) {
+      setRsvpList(await res.json());
+    }
+  }
 
   return (
     <div className={s.container || styles.container}>
@@ -58,12 +70,15 @@ export default function EventPage({ event, themeStyles }: EventPageProps) {
       {rsvp && rsvp.attending && event.heroEmoji && <EmojiRain emoji={event.heroEmoji} />}
 
       {rsvp ? (
-        <RSVPSuccess rsvp={rsvp} />
+        <>
+          <RSVPSuccess rsvp={rsvp} />
+          {rsvpList.length > 0 && <RSVPList rsvps={rsvpList} />}
+        </>
       ) : (
         <RSVPForm
           slug={event.slug}
           maxGuests={event.maxGuests}
-          onSuccess={setRsvp}
+          onSuccess={handleRsvpSuccess}
         />
       )}
     </div>

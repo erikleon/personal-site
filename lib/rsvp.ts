@@ -48,6 +48,32 @@ export async function saveRSVP(
   return rsvp;
 }
 
+export interface PublicRSVP {
+  name: string;
+  attending: boolean;
+  guestCount: number;
+  note?: string;
+}
+
+export function toPublicRSVP(rsvp: RSVP): PublicRSVP {
+  return {
+    name: rsvp.name,
+    attending: rsvp.attending,
+    guestCount: rsvp.guestCount,
+    note: rsvp.note,
+  };
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function getRSVP(slug: string, id: string): Promise<RSVP | null> {
+  if (!UUID_RE.test(id)) return null;
+  const redis = getRedis();
+  const raw = await redis.get(redisKey(`rsvp:${slug}:${id}`));
+  if (!raw) return null;
+  return typeof raw === "string" ? (JSON.parse(raw) as RSVP) : (raw as RSVP);
+}
+
 export async function getRSVPs(slug: string): Promise<RSVP[]> {
   const redis = getRedis();
   const ids = await redis.smembers(redisKey(`rsvp-index:${slug}`));

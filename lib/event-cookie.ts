@@ -33,7 +33,8 @@ export function cookieName(slug: string): string {
 export function makeSetCookieHeader(slug: string): string {
   const value = signCookieValue(slug);
   const maxAge = 30 * 24 * 60 * 60;
-  return `${cookieName(slug)}=${value}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Lax`;
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  return `${cookieName(slug)}=${value}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Lax${secure}`;
 }
 
 export function hasValidAccess(

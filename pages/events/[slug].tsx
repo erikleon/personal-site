@@ -3,6 +3,7 @@ import Head from "next/head";
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { events, EventEntry } from "../../data/events";
 import { hasValidAccess } from "../../lib/event-cookie";
+import { getRSVP, getRSVPs, toPublicRSVP, RSVP, PublicRSVP } from "../../lib/rsvp";
 import PasswordGate from "../../components/events/PasswordGate";
 import EventPage from "../../components/events/EventPage";
 
@@ -22,12 +23,27 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   // Verify HMAC-signed access cookie
   const access = hasValidAccess(ctx.req.cookies, slug);
 
-  return { props: { event: safeEvent, hasAccess: access } };
+  // Pre-load existing RSVP and list for returning visitors
+  let existingRsvp: RSVP | null = null;
+  let rsvpList: PublicRSVP[] = [];
+
+  const rsvpId = ctx.req.cookies[`rsvped-${slug}`];
+  if (rsvpId) {
+    existingRsvp = await getRSVP(slug, rsvpId);
+    if (existingRsvp) {
+      const allRsvps = await getRSVPs(slug);
+      rsvpList = allRsvps.map(toPublicRSVP);
+    }
+  }
+
+  return { props: { event: safeEvent, hasAccess: access, existingRsvp, rsvpList } };
 }
 
 export default function EventSlugPage({
   event,
   hasAccess: initialAccess,
+  existingRsvp,
+  rsvpList,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [hasAccess, setHasAccess] = useState(initialAccess);
 
@@ -37,7 +53,11 @@ export default function EventSlugPage({
         <title>{event.title}</title>
       </Head>
       {hasAccess ? (
-        <EventPage event={event as SafeEvent} />
+        <EventPage
+          event={event as SafeEvent}
+          existingRsvp={existingRsvp}
+          rsvpList={rsvpList}
+        />
       ) : (
         <PasswordGate slug={event.slug} onSuccess={() => setHasAccess(true)} />
       )}
