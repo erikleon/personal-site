@@ -174,7 +174,7 @@ export const personalProjects: ProjectEntry[] = [
     company: "Open Source",
     type: "DX",
     description:
-      "A ~4KB gzipped WYSIWYG editor for the browser with a built-in XSS sanitizer. Built on contentEditable and MutationObserver, with a customizable tag/attribute allowlist and a standalone sanitizer module that can be used on its own.",
+      "A ~6KB gzipped WYSIWYG editor for the browser with a built-in XSS sanitizer. Built on contentEditable and MutationObserver, with a customizable tag/attribute allowlist and a standalone sanitizer module that can be used on its own.",
     stack: [
       "TypeScript",
       "Vanilla JS",
@@ -183,7 +183,7 @@ export const personalProjects: ProjectEntry[] = [
       "MutationObserver",
     ],
     highlights: [
-      "4054 bytes gzipped for the full ESM bundle (all 4 modules)",
+      "6054 bytes gzipped for the full ESM bundle (all 4 modules)",
       "Ships a standalone HTML sanitizer that strips scripts and dangerous attributes from pasted content",
       "Customizable allowlist policy for permitted tags and attributes",
       "Accessible toolbar with keyboard navigation and ARIA labels",
