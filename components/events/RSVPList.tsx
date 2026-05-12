@@ -20,7 +20,7 @@ export default function RSVPList({ rsvps }: RSVPListProps) {
           </p>
           <ul className={styles.list}>
             {attending.map((rsvp, i) => (
-              <li key={i} className={styles.item}>
+              <li key={`${rsvp.name}-${i}`} className={styles.item}>
                 <div className={styles.itemHeader}>
                   <span className={styles.name}>{rsvp.name}</span>
                   {rsvp.guestCount > 1 && (
@@ -43,7 +43,7 @@ export default function RSVPList({ rsvps }: RSVPListProps) {
           <h3 className={styles.subheading}>Can&apos;t make it</h3>
           <ul className={styles.list}>
             {notAttending.map((rsvp, i) => (
-              <li key={i} className={styles.item}>
+              <li key={`${rsvp.name}-${i}`} className={styles.item}>
                 <span className={styles.name}>{rsvp.name}</span>
                 {rsvp.note && <p className={styles.note}>{rsvp.note}</p>}
               </li>

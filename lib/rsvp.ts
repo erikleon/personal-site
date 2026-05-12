@@ -64,7 +64,10 @@ export function toPublicRSVP(rsvp: RSVP): PublicRSVP {
   };
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export async function getRSVP(slug: string, id: string): Promise<RSVP | null> {
+  if (!UUID_RE.test(id)) return null;
   const redis = getRedis();
   const raw = await redis.get(redisKey(`rsvp:${slug}:${id}`));
   if (!raw) return null;

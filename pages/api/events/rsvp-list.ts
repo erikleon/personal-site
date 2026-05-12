@@ -23,11 +23,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(403).json({ error: "RSVP required to view list" });
   }
 
-  const rsvp = await getRSVP(slug, rsvpId);
-  if (!rsvp) {
-    return res.status(403).json({ error: "RSVP not found" });
-  }
+  try {
+    const rsvp = await getRSVP(slug, rsvpId);
+    if (!rsvp) {
+      return res.status(403).json({ error: "RSVP not found" });
+    }
 
-  const rsvps = await getRSVPs(slug);
-  return res.status(200).json(rsvps.map(toPublicRSVP));
+    const rsvps = await getRSVPs(slug);
+    return res.status(200).json(rsvps.map(toPublicRSVP));
+  } catch {
+    return res.status(500).json({ error: "Internal server error" });
+  }
 }

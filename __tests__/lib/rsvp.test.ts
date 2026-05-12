@@ -11,7 +11,7 @@ jest.mock("@upstash/redis", () => ({
 }));
 
 const baseRsvp: RSVP = {
-  id: "abc-123",
+  id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   slug: "my-event",
   name: "Alice",
   attending: true,
@@ -51,21 +51,27 @@ describe("toPublicRSVP", () => {
 describe("getRSVP", () => {
   beforeEach(() => mockGet.mockReset());
 
+  it("returns null for invalid UUID format (rejects crafted Redis keys)", async () => {
+    const result = await getRSVP("my-event", "abc-123");
+    expect(result).toBeNull();
+    expect(mockGet).not.toHaveBeenCalled();
+  });
+
   it("returns null when key is not in Redis", async () => {
     mockGet.mockResolvedValue(null);
-    const result = await getRSVP("my-event", "abc-123");
+    const result = await getRSVP("my-event", "a1b2c3d4-e5f6-7890-abcd-ef1234567890");
     expect(result).toBeNull();
   });
 
   it("parses a JSON string from Redis", async () => {
     mockGet.mockResolvedValue(JSON.stringify(baseRsvp));
-    const result = await getRSVP("my-event", "abc-123");
+    const result = await getRSVP("my-event", "a1b2c3d4-e5f6-7890-abcd-ef1234567890");
     expect(result).toEqual(baseRsvp);
   });
 
   it("returns a pre-parsed object from Redis without double-parsing", async () => {
     mockGet.mockResolvedValue(baseRsvp);
-    const result = await getRSVP("my-event", "abc-123");
+    const result = await getRSVP("my-event", "a1b2c3d4-e5f6-7890-abcd-ef1234567890");
     expect(result).toEqual(baseRsvp);
   });
 });
