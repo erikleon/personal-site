@@ -11,7 +11,7 @@ export default function RSVPSuccess({ rsvp }: RSVPSuccessProps) {
       <div className={styles.container}>
         <h2 className={styles.heading}>Thanks for letting us know</h2>
         <p className={styles.message}>
-          Sorry you can't make it, <strong>{rsvp.name}</strong>. We'll miss you!
+          Sorry you can&rsquo;t make it, <strong>{rsvp.name}</strong>. We&rsquo;ll miss you!
         </p>
       </div>
     );
@@ -19,9 +19,9 @@ export default function RSVPSuccess({ rsvp }: RSVPSuccessProps) {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>You're in!</h2>
+      <h2 className={styles.heading}>You&rsquo;re in!</h2>
       <p className={styles.message}>
-        Thanks, <strong>{rsvp.name}</strong>! We've got you down for{" "}
+        Thanks, <strong>{rsvp.name}</strong>! We&rsquo;ve got you down for{" "}
         {rsvp.guestCount} {rsvp.guestCount === 1 ? "guest" : "guests"}.
       </p>
       <p className={styles.note}>See you there!</p>
