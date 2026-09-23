@@ -15,18 +15,30 @@ export default function AdminRSVPs() {
     events.length > 0 ? events[0].slug : ""
   );
   const [rsvps, setRsvps] = useState<RSVP[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(Boolean(selectedSlug));
+
+  const selectEvent = (slug: string) => {
+    setSelectedSlug(slug);
+    setLoading(true);
+  };
 
   useEffect(() => {
     if (!selectedSlug) return;
-    setLoading(true);
-    fetch(`/api/events/rsvp?slug=${selectedSlug}`)
+    // Drop responses for an event that is no longer selected.
+    let ignore = false;
+    fetch(`/api/events/rsvp?slug=${encodeURIComponent(selectedSlug)}`)
       .then((r) => r.json())
       .then((data) => {
+        if (ignore) return;
         setRsvps(Array.isArray(data) ? data : []);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        if (!ignore) setLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
   }, [selectedSlug]);
 
   const attendingRsvps = rsvps.filter((r) => r.attending !== false);
@@ -47,7 +59,7 @@ export default function AdminRSVPs() {
           <>
             <select
               value={selectedSlug}
-              onChange={(e) => setSelectedSlug(e.target.value)}
+              onChange={(e) => selectEvent(e.target.value)}
               className={styles.select}
             >
               {events.map((ev) => (
