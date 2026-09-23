@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # next typegen writes next-env.d.ts (gitignored), which declares
+      # static image imports such as pages/404.tsx's cat.gif.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test:ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Placeholders: lib/auth.ts requires these at import time. The build
+          # never calls GitHub, NextAuth, or Redis with them.
+          GITHUB_CLIENT_ID: ci-placeholder
+          GITHUB_CLIENT_SECRET: ci-placeholder
+          NEXTAUTH_SECRET: ci-placeholder
+          AUTHORIZED_GITHUB_ID: "0"
+          UPSTASH_REDIS_REST_URL: https://example.invalid
+          UPSTASH_REDIS_REST_TOKEN: ci-placeholder
