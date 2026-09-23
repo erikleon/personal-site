@@ -1,12 +1,20 @@
 export interface ProjectEntry {
   name: string;
   company: string;
-  type: "Feature" | "Architecture" | "DX";
+  type:
+    | "Feature"
+    | "Architecture"
+    | "DX"
+    | "Library"
+    | "Tool"
+    | "App"
+    | "Template";
   description: string;
   stack: string[];
   highlights: string[];
   demoUrl?: string;
   repoUrl?: string;
+  packageUrl?: string;
 }
 
 export const projects: ProjectEntry[] = [
