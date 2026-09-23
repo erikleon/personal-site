@@ -66,7 +66,11 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 | `npm run build` | Generate the sitemap and build for production |
 | `npm start`     | Start the production server                   |
 | `npm run lint`  | Run ESLint                                    |
+| `npm run typecheck` | Type-check the whole project (including tests) |
 | `npm test`      | Run tests in watch mode                       |
+| `npm run test:ci` | Run tests once (what CI runs)               |
+
+CI (`.github/workflows/ci.yml`) runs lint, typecheck, `test:ci`, and the production build on every pull request and on pushes to `main`.
 
 ## Project Structure
 
