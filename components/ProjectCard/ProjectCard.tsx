@@ -7,8 +7,21 @@ interface ProjectCardProps {
   theme: "light" | "dark";
 }
 
+export function toDomId(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 export default function ProjectCard({ project, theme }: ProjectCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const highlightsId = `highlights-${toDomId(project.name)}`;
+  const links = [
+    { label: "Demo", url: project.demoUrl },
+    { label: "Repo", url: project.repoUrl },
+    { label: "Package", url: project.packageUrl },
+  ].filter((link): link is { label: string; url: string } => !!link.url);
 
   return (
     <div
@@ -29,30 +42,20 @@ export default function ProjectCard({ project, theme }: ProjectCardProps) {
           </span>
         ))}
       </div>
-      {(project.demoUrl || project.repoUrl) && (
+      {links.length > 0 && (
         <div className={styles.links}>
-          {project.demoUrl && (
+          {links.map(({ label, url }) => (
             <a
-              href={project.demoUrl}
+              key={label}
+              href={url}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
               onClick={(e) => e.stopPropagation()}
             >
-              Demo ↗
+              {label} ↗
             </a>
-          )}
-          {project.repoUrl && (
-            <a
-              href={project.repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.link}
-              onClick={(e) => e.stopPropagation()}
-            >
-              Repo ↗
-            </a>
-          )}
+          ))}
         </div>
       )}
       {project.highlights.length > 0 && (
@@ -60,13 +63,13 @@ export default function ProjectCard({ project, theme }: ProjectCardProps) {
           <button
             type="button"
             aria-expanded={expanded}
-            aria-controls={`highlights-${project.name}`}
+            aria-controls={highlightsId}
             className={styles.expandButton}
           >
             {expanded ? "Hide highlights" : "Show highlights"}
           </button>
           {expanded && (
-            <ul id={`highlights-${project.name}`} className={styles.highlights}>
+            <ul id={highlightsId} className={styles.highlights}>
               {project.highlights.map((h) => (
                 <li key={h}>{h}</li>
               ))}

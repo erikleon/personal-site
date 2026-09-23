@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3.0] - 2026-09-23
+
+### Added
+- Six more open-source repos in the Personal Projects section on /projects: rss-reader, fresh-direct-tool, strictdatetime, citibike2strava, stoop, and access-dissect
+- Project cards can link to a published package (e.g. npm) alongside the demo and repo links
+
+### Fixed
+- The "Show highlights" button's `aria-controls` now points at a valid element id (project names with spaces produced an invalid id)
+
 ## [0.1.2.0] - 2026-05-12
 
 ### Added

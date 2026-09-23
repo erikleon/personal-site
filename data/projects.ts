@@ -1,12 +1,20 @@
 export interface ProjectEntry {
   name: string;
   company: string;
-  type: "Feature" | "Architecture" | "DX";
+  type:
+    | "Feature"
+    | "Architecture"
+    | "DX"
+    | "Library"
+    | "Tool"
+    | "App"
+    | "Template";
   description: string;
   stack: string[];
   highlights: string[];
   demoUrl?: string;
   repoUrl?: string;
+  packageUrl?: string;
 }
 
 export const projects: ProjectEntry[] = [
@@ -170,9 +178,55 @@ export const projects: ProjectEntry[] = [
 
 export const personalProjects: ProjectEntry[] = [
   {
+    name: "rss-reader",
+    company: "Open Source",
+    type: "App",
+    description:
+      "A personal RSS reader that groups items by day with read/unread tracking. Runs as a web app or a CLI over the same core, and gets each user's identity from the Tailscale ingress header instead of passwords.",
+    stack: ["Python", "FastAPI", "SQLModel", "Alembic", "Svelte", "Typer"],
+    highlights: [
+      "Feed autodiscovery: paste a site homepage and the real feed is found from its <link rel=\"alternate\"> tags",
+      "OPML import from the web UI, CLI, or API, plus background auto-refresh on a configurable interval",
+      "Reader view strips articles to text with no navigation, sidebars, or scripts",
+      "Multi-user with per-person subscriptions and read state, checked against an allowlist",
+    ],
+    repoUrl: "https://github.com/erikleon/rss-reader",
+  },
+  {
+    name: "fresh-direct-tool",
+    company: "Open Source",
+    type: "App",
+    description:
+      "An agent and web app that plans a household's weekly FreshDirect order: predicts which staples are due for restock, builds a draft cart with live prices, keeps it under a weekly budget, and hands off a ready-to-checkout cart once the household approves it.",
+    stack: ["Python", "FastAPI", "SQLite", "Playwright", "Claude API", "MCP"],
+    highlights: [
+      "Reads full order history through FreshDirect's GraphQL API from a real Chrome session",
+      "Suggests cheaper swaps when the draft cart runs over budget and flags low-confidence lines for review",
+      "Token-authenticated JSON API used by a Home Assistant / Apple Reminders shopping-list bridge",
+      "Local-first by design: runs on your own machine or server, with the stored session encrypted at rest",
+    ],
+    repoUrl: "https://github.com/erikleon/fresh-direct-tool",
+  },
+  {
+    name: "strictdatetime",
+    company: "Open Source",
+    type: "Library",
+    description:
+      "Strict, immutable date and time utilities for JavaScript and TypeScript with zero runtime dependencies. Pure named functions over frozen records, with separate exact elapsed-time and calendar wall-time arithmetic.",
+    stack: ["TypeScript", "ESM", "CommonJS", "Intl", "Vitest"],
+    highlights: [
+      "Strict typed parsers: native Date.parse strings are never accepted implicitly",
+      "IANA time zones through the host runtime's Intl data, plus fixed-offset zones",
+      "Millisecond precision; finer non-zero precision is rejected instead of silently truncated",
+      "Published to npm with ESM and CommonJS builds sharing one set of type declarations",
+    ],
+    repoUrl: "https://github.com/erikleon/strictdatetime",
+    packageUrl: "https://www.npmjs.com/package/strictdatetime",
+  },
+  {
     name: "minisiwyg-editor",
     company: "Open Source",
-    type: "DX",
+    type: "Library",
     description:
       "A ~6KB gzipped WYSIWYG editor for the browser with a built-in XSS sanitizer. Built on contentEditable and MutationObserver, with a customizable tag/attribute allowlist and a standalone sanitizer module that can be used on its own.",
     stack: [
@@ -190,5 +244,50 @@ export const personalProjects: ProjectEntry[] = [
     ],
     demoUrl: "https://erikleon.github.io/minisiwyg-editor/",
     repoUrl: "https://github.com/erikleon/minisiwyg-editor",
+  },
+  {
+    name: "citibike2strava",
+    company: "Open Source",
+    type: "Tool",
+    description:
+      "A small, auditable Python CLI that turns Citi Bike ride receipt emails in Gmail into Strava activities with the real route map, correct distance, and proper timestamps. You register your own Google and Strava apps, so tokens never leave your machine.",
+    stack: ["Python", "Gmail API", "Strava API", "GPX"],
+    highlights: [
+      "Decodes the route polyline from the receipt because the Gmail API corrupts the map URL's scalar coordinates",
+      "Rate-limit aware, resumable backfill of your whole ride history, plus scheduled auto-sync",
+      "Works with other Lyft bikeshares: Divvy, Bay Wheels, Bluebikes, and Capital Bikeshare",
+      "Tags e-bike rides as E-Bike Ride and labels each email so nothing uploads twice",
+    ],
+    repoUrl: "https://github.com/erikleon/citibike2strava",
+  },
+  {
+    name: "stoop",
+    company: "Open Source",
+    type: "Template",
+    description:
+      "An MIT-licensed template for a small, private neighborhood website: approval-gated sign-in, event pages, and a searchable archive of the block's Google Group. Runs entirely within Cloudflare's free tiers.",
+    stack: ["SvelteKit", "Cloudflare Pages", "Cloudflare D1", "Auth.js"],
+    highlights: [
+      "Full-text search over the group archive with SQLite FTS5 on D1",
+      "A Cloudflare Email Worker ingests new posts; a Node script imports the historical .mbox backlog",
+      "Sign in with Google or an emailed magic link, gated by admin approval",
+      "One npm run setup pass personalizes the site name, group address, and domain",
+    ],
+    repoUrl: "https://github.com/erikleon/stoop",
+  },
+  {
+    name: "access-dissect",
+    company: "Open Source",
+    type: "Tool",
+    description:
+      "A Windows-native Python tool that reverse-engineers Microsoft Access .accdb/.mdb applications into a structured catalog, then renders documentation and migration artifacts from it.",
+    stack: ["Python", "COM automation", "pyodbc", "Pydantic", "Jinja2"],
+    highlights: [
+      "Extracts schema, queries, forms, reports, and VBA into a JSON/YAML catalog",
+      "Renders cross-linked Markdown, a self-contained HTML report with Mermaid ER diagrams, and SQL DDL for PostgreSQL, SQLite, or SQL Server",
+      "Analysis pass produces a dependency graph, complexity scores, and modernization recommendations",
+      "117 unit tests; rendering and analysis run on any OS from an extracted catalog",
+    ],
+    repoUrl: "https://github.com/erikleon/msft-access-dissect",
   },
 ];
