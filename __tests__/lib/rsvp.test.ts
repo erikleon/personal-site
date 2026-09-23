@@ -33,11 +33,11 @@ describe("toPublicRSVP", () => {
   });
 
   it("omits sensitive fields", () => {
-    const pub = toPublicRSVP(baseRsvp) as Record<string, unknown>;
-    expect(pub.id).toBeUndefined();
-    expect(pub.contact).toBeUndefined();
-    expect(pub.createdAt).toBeUndefined();
-    expect(pub.slug).toBeUndefined();
+    const pub = toPublicRSVP(baseRsvp);
+    expect(pub).not.toHaveProperty("id");
+    expect(pub).not.toHaveProperty("contact");
+    expect(pub).not.toHaveProperty("createdAt");
+    expect(pub).not.toHaveProperty("slug");
   });
 
   it("works when note is undefined", () => {
