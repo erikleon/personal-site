@@ -25,7 +25,7 @@ const Playlists = ({ data }: Props) => {
     })
     .then((response) => response.json())
     .then((data) => {
-      setPlaylists(data.items)
+      setPlaylists(Array.isArray(data.items) ? data.items : [])
     });
   }, [data.access_token])
 
