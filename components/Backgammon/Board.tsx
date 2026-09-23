@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import type { GameState, Move } from "../../lib/backgammon/types";
 import {
   createInitialState,
@@ -34,65 +34,29 @@ export default function Board() {
   const isPlayerTurn = twoPlayer || state.currentPlayer === HUMAN_PLAYER;
 
   // Get legal moves from the selected source
-  const legalMoves = getLegalMoves(state);
-  const movesFromSelected =
-    selected !== null ? legalMoves.filter((m) => m.from === selected) : [];
-
-  // Legal target indices for the selected checker
-  const legalTargets = new Set(movesFromSelected.map((m) => m.to));
-
-  // Which points have checkers the player can move
-  const movableSources = new Set(
-    isPlayerTurn && state.phase === "moving"
-      ? legalMoves.map((m) => m.from)
-      : [],
+  const legalMoves = useMemo(() => getLegalMoves(state), [state]);
+  const movesFromSelected = useMemo(
+    () =>
+      selected !== null ? legalMoves.filter((m) => m.from === selected) : [],
+    [legalMoves, selected],
   );
 
-  const handleRoll = useCallback(() => {
-    if (!isPlayerTurn || state.phase !== "rolling") return;
-    const next = startTurn(state);
-    setState(next);
-    setSelected(null);
+  // Legal target indices for the selected checker
+  const legalTargets = useMemo(
+    () => new Set(movesFromSelected.map((m) => m.to)),
+    [movesFromSelected],
+  );
 
-    // If turn was skipped (no legal moves), AI goes (only in single-player)
-    if (
-      !twoPlayer &&
-      next.currentPlayer !== HUMAN_PLAYER &&
-      next.phase === "rolling"
-    ) {
-      runAiTurn(next);
-    }
-  }, [state, isPlayerTurn, twoPlayer]);
-
-  const handleEndTurn = useCallback(() => {
-    if (remainingDice(state).length > 0) return;
-    const next = endTurn(state);
-    setState(next);
-    setSelected(null);
-
-    if (
-      !twoPlayer &&
-      next.phase !== "finished" &&
-      next.currentPlayer !== HUMAN_PLAYER
-    ) {
-      runAiTurn(next);
-    }
-  }, [state, twoPlayer]);
-
-  const handleNewGame = useCallback(() => {
-    if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
-    setState(createInitialState());
-    setSelected(null);
-    setIsAiThinking(false);
-  }, []);
-
-  const handleToggleMode = useCallback(() => {
-    if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
-    setTwoPlayer((prev) => !prev);
-    setState(createInitialState());
-    setSelected(null);
-    setIsAiThinking(false);
-  }, []);
+  // Which points have checkers the player can move
+  const movableSources = useMemo(
+    () =>
+      new Set(
+        isPlayerTurn && state.phase === "moving"
+          ? legalMoves.map((m) => m.from)
+          : [],
+      ),
+    [legalMoves, isPlayerTurn, state.phase],
+  );
 
   const runAiTurn = useCallback((s: GameState) => {
     setIsAiThinking(true);
@@ -136,59 +100,51 @@ export default function Board() {
     }, 600);
   }, []);
 
-  const handlePointClick = useCallback(
-    (index: number) => {
-      if (!isPlayerTurn || state.phase !== "moving" || isAiThinking) return;
+  const handleRoll = useCallback(() => {
+    if (!isPlayerTurn || state.phase !== "rolling") return;
+    const next = startTurn(state);
+    setState(next);
+    setSelected(null);
 
-      // If clicking a legal target, make the move
-      if (selected !== null && legalTargets.has(index)) {
-        const move = movesFromSelected.find((m) => m.to === index);
-        if (move) {
-          applyPlayerMove(move);
-          return;
-        }
-      }
-
-      // If clicking own checker that has legal moves, select it
-      if (movableSources.has(index)) {
-        setSelected(index);
-        return;
-      }
-
-      setSelected(null);
-    },
-    [
-      state,
-      selected,
-      isPlayerTurn,
-      isAiThinking,
-      legalTargets,
-      movableSources,
-      movesFromSelected,
-    ],
-  );
-
-  const handleBarClick = useCallback(() => {
-    if (!isPlayerTurn || state.phase !== "moving" || isAiThinking) return;
-    if (state.bar[HUMAN_PLAYER] > 0 && movableSources.has("bar")) {
-      setSelected("bar");
+    // If turn was skipped (no legal moves), AI goes (only in single-player)
+    if (
+      !twoPlayer &&
+      next.currentPlayer !== HUMAN_PLAYER &&
+      next.phase === "rolling"
+    ) {
+      runAiTurn(next);
     }
-  }, [state, isPlayerTurn, isAiThinking, movableSources]);
+  }, [state, isPlayerTurn, twoPlayer, runAiTurn]);
 
-  const handleBearOffClick = useCallback(() => {
-    if (!isPlayerTurn || state.phase !== "moving" || isAiThinking) return;
-    if (selected !== null && legalTargets.has("off")) {
-      const move = movesFromSelected.find((m) => m.to === "off");
-      if (move) applyPlayerMove(move);
+  const handleEndTurn = useCallback(() => {
+    if (remainingDice(state).length > 0) return;
+    const next = endTurn(state);
+    setState(next);
+    setSelected(null);
+
+    if (
+      !twoPlayer &&
+      next.phase !== "finished" &&
+      next.currentPlayer !== HUMAN_PLAYER
+    ) {
+      runAiTurn(next);
     }
-  }, [
-    state,
-    selected,
-    isPlayerTurn,
-    isAiThinking,
-    legalTargets,
-    movesFromSelected,
-  ]);
+  }, [state, twoPlayer, runAiTurn]);
+
+  const handleNewGame = useCallback(() => {
+    if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
+    setState(createInitialState());
+    setSelected(null);
+    setIsAiThinking(false);
+  }, []);
+
+  const handleToggleMode = useCallback(() => {
+    if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
+    setTwoPlayer((prev) => !prev);
+    setState(createInitialState());
+    setSelected(null);
+    setIsAiThinking(false);
+  }, []);
 
   const applyPlayerMove = useCallback(
     (move: Move) => {
@@ -226,6 +182,62 @@ export default function Board() {
     },
     [state, runAiTurn, twoPlayer],
   );
+
+  const handlePointClick = useCallback(
+    (index: number) => {
+      if (!isPlayerTurn || state.phase !== "moving" || isAiThinking) return;
+
+      // If clicking a legal target, make the move
+      if (selected !== null && legalTargets.has(index)) {
+        const move = movesFromSelected.find((m) => m.to === index);
+        if (move) {
+          applyPlayerMove(move);
+          return;
+        }
+      }
+
+      // If clicking own checker that has legal moves, select it
+      if (movableSources.has(index)) {
+        setSelected(index);
+        return;
+      }
+
+      setSelected(null);
+    },
+    [
+      state,
+      selected,
+      isPlayerTurn,
+      isAiThinking,
+      legalTargets,
+      movableSources,
+      movesFromSelected,
+      applyPlayerMove,
+    ],
+  );
+
+  const handleBarClick = useCallback(() => {
+    if (!isPlayerTurn || state.phase !== "moving" || isAiThinking) return;
+    if (state.bar[HUMAN_PLAYER] > 0 && movableSources.has("bar")) {
+      setSelected("bar");
+    }
+  }, [state, isPlayerTurn, isAiThinking, movableSources]);
+
+  const handleBearOffClick = useCallback(() => {
+    if (!isPlayerTurn || state.phase !== "moving" || isAiThinking) return;
+    if (selected !== null && legalTargets.has("off")) {
+      const move = movesFromSelected.find((m) => m.to === "off");
+      if (move) applyPlayerMove(move);
+    }
+  }, [
+    state,
+    selected,
+    isPlayerTurn,
+    isAiThinking,
+    legalTargets,
+    movesFromSelected,
+    applyPlayerMove,
+  ]);
 
   const handleAutoMove = useCallback(
     (from: number | "bar") => {

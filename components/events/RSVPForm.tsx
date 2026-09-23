@@ -95,7 +95,7 @@ export default function RSVPForm({
               onChange={() => setAttending(false)}
               className={styles.radio}
             />
-            No, can't make it
+            No, can&rsquo;t make it
           </label>
         </div>
       </fieldset>

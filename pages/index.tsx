@@ -3,42 +3,48 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 
-const Home: NextPage = () => {
-  const actionList = [ "Build", "Break", "Rebuild", "Collaborate", "Deploy", "Maintain", "Join your team" ];
-  const period = 2000; 
+const ACTIONS = [ "Build", "Break", "Rebuild", "Collaborate", "Deploy", "Maintain", "Join your team" ];
+const PAUSE = 2000;
+const typingDelay = () => 300 - Math.random() * 100;
 
+const Home: NextPage = () => {
   const [loopNum, setLoopNum] = useState(0);
-  const [delta, setDelta] = useState(period);
   const [txt, setTxt] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const typewrite = () => {
-    const word = actionList[loopNum];
-    setDelta(300 - Math.random() * 100);
-    if (txt.length < word.length) {
-      setTimeout(() => {
-        if (isDeleting) {
-          const trimmed = word.substring(0, txt.length - 1);
-          if (trimmed === '' && loopNum < actionList.length - 1) {
-            setLoopNum((prevState) => prevState + 1)
-            setIsDeleting(false);
-          }
-          setTxt(trimmed);
-        } else {
-          setTxt(word.substring(0, txt.length + 1));
-        }
-      }, delta)
-    } else if (txt === word && loopNum < actionList.length - 1) {
-      setIsDeleting(true);
-      setTimeout(() => {
-        setTxt(word.substring(0, txt.length - 1));
-      }, period)
-    }
-  }
-
+  // One timer per state: type a letter, pause on a full word, or delete a
+  // letter. The last phrase stays on screen.
   useEffect(() => {
-    typewrite();
-  }, [txt]);
+    const word = ACTIONS[loopNum];
+    const isLastWord = loopNum === ACTIONS.length - 1;
+    let delay: number;
+    let step: () => void;
+
+    if (isDeleting) {
+      delay = typingDelay();
+      step = () => {
+        const trimmed = txt.slice(0, -1);
+        if (trimmed === '') {
+          setLoopNum((n) => n + 1);
+          setIsDeleting(false);
+        }
+        setTxt(trimmed);
+      };
+    } else if (txt === word) {
+      if (isLastWord) return;
+      delay = PAUSE;
+      step = () => {
+        setIsDeleting(true);
+        setTxt(word.slice(0, -1));
+      };
+    } else {
+      delay = txt === '' && loopNum === 0 ? PAUSE : typingDelay();
+      step = () => setTxt(word.slice(0, txt.length + 1));
+    }
+
+    const timer = setTimeout(step, delay);
+    return () => clearTimeout(timer);
+  }, [txt, isDeleting, loopNum]);
 
   return (
     <div className={styles.container}>
