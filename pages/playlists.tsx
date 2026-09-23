@@ -27,7 +27,7 @@ const Playlists = ({ data }: Props) => {
     .then((data) => {
       setPlaylists(data.items)
     });
-  }, [])
+  }, [data.access_token])
 
   const renderPlaylists = () => {
     if (playlists.length > 1) {
