@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import type { Player } from "../../lib/backgammon/types";
 import styles from "../../styles/Backgammon.module.css";
 
@@ -50,47 +50,41 @@ export default function Dice({ dice, usedDice, player }: DiceProps) {
   // Use a stable string key to avoid firing on cloned-array re-renders
   const diceKey = dice ? `${dice[0]}-${dice[1]}` : null;
 
-  const [displayDice, setDisplayDice] = useState<[number, number] | null>(dice);
-  const [isRolling, setIsRolling] = useState(false);
-  const prevKeyRef = useRef<string | null>(diceKey);
+  // Key of the roll currently animating; only set when dice appear from none
+  // (a new roll), not when the values change while already showing.
+  const [rollingKey, setRollingKey] = useState<string | null>(null);
+  // Random faces shown while rolling; null until the first cycle tick.
+  const [rollingFaces, setRollingFaces] = useState<[number, number] | null>(
+    null,
+  );
+  const [prevKey, setPrevKey] = useState<string | null>(diceKey);
+
+  if (diceKey !== prevKey) {
+    setPrevKey(diceKey);
+    const isNewRoll = prevKey === null && diceKey !== null;
+    setRollingKey(isNewRoll ? diceKey : null);
+    setRollingFaces(null);
+  }
 
   useEffect(() => {
-    const prevKey = prevKeyRef.current;
-    prevKeyRef.current = diceKey;
+    if (rollingKey === null) return;
 
-    if (diceKey === null) {
-      setDisplayDice(null);
-      setIsRolling(false);
-      return;
-    }
-
-    // Dice was already showing (e.g. usedDice changed, not a new roll)
-    if (prevKey !== null) {
-      setDisplayDice(dice);
-      return;
-    }
-
-    // Dice just appeared: animate
-    const finalDice = dice; // capture at effect time; dice prop may change
-    setIsRolling(true);
     const interval = setInterval(() => {
-      setDisplayDice([
-        (Math.floor(Math.random() * 6) + 1) as 1 | 2 | 3 | 4 | 5 | 6,
-        (Math.floor(Math.random() * 6) + 1) as 1 | 2 | 3 | 4 | 5 | 6,
+      setRollingFaces([
+        Math.floor(Math.random() * 6) + 1,
+        Math.floor(Math.random() * 6) + 1,
       ]);
     }, CYCLE_INTERVAL);
-
-    const timeout = setTimeout(() => {
-      clearInterval(interval);
-      setDisplayDice(finalDice);
-      setIsRolling(false);
-    }, ROLL_DURATION);
+    const timeout = setTimeout(() => setRollingKey(null), ROLL_DURATION);
 
     return () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, [diceKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [rollingKey]);
+
+  const isRolling = rollingKey !== null;
+  const displayDice = isRolling ? rollingFaces : dice;
 
   if (!displayDice) return <div className={styles.diceArea} />;
 
@@ -112,7 +106,7 @@ export default function Dice({ dice, usedDice, player }: DiceProps) {
     );
   }
 
-  // Settled: show real dice with used state (use displayDice — dice prop may be null already)
+  // Settled: show the real dice with used state
   const used = [...usedDice];
   const dieStates = displayDice.map((value) => {
     const idx = used.indexOf(value);
