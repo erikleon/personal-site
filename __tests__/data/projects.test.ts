@@ -1,9 +1,16 @@
 import { personalProjects, projects } from "../../data/projects";
+import { toDomId } from "../../components/ProjectCard/ProjectCard";
 
 describe("projects data", () => {
   it("has unique names across work and personal projects", () => {
     const names = [...projects, ...personalProjects].map((p) => p.name);
     expect(new Set(names).size).toBe(names.length);
+  });
+
+  it("has unique highlight DOM ids across work and personal projects", () => {
+    // Both grids render on /projects, so slug collisions would duplicate ids.
+    const ids = [...projects, ...personalProjects].map((p) => toDomId(p.name));
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
   it.each(personalProjects.map((p) => [p.name, p]))(

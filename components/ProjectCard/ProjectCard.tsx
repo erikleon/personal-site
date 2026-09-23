@@ -7,7 +7,7 @@ interface ProjectCardProps {
   theme: "light" | "dark";
 }
 
-function toDomId(name: string): string {
+export function toDomId(name: string): string {
   return name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
