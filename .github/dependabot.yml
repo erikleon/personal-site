@@ -14,6 +14,14 @@ updates:
       # Keep @types/node on the same major as engines.node in package.json.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # ESLint 10: eslint-plugin-react (via eslint-config-next) still calls the
+      # removed context.getFilename() API and crashes. See #63.
+      - dependency-name: "eslint"
+        versions: [">=10.0.0"]
+      # TypeScript 7 (native compiler) lacks the JS API Next.js loads at build
+      # time, and typescript-eslint requires <6.1.0. See #57.
+      - dependency-name: "typescript"
+        versions: [">=7.0.0"]
     groups:
       react:
         patterns:
