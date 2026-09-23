@@ -10,6 +10,10 @@ updates:
       - "erikleon"
     labels:
       - "dependencies"
+    ignore:
+      # Keep @types/node on the same major as engines.node in package.json.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       react:
         patterns:
